@@ -210,6 +210,64 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
 .result-actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+
+/* ---------- Mobile ---------- */
+.pal-toggle,.sheet-head,.sheet-bg,.mstart{display:none}
+@media (max-width:860px){
+  body{font-size:16px;padding-inline:12px}
+  .masthead{padding-block:20px 14px;margin-bottom:16px}
+  .masthead h1{font-size:26px}
+  .masthead p{font-size:15px}
+  .panel{padding:16px;border-radius:12px}
+  .sets{grid-template-columns:1fr}
+  .set-card{padding:10px 12px}
+  .mstart{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:9;gap:10px;align-items:center;justify-content:space-between;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px))}
+  .mstart span{font-size:13.5px;color:var(--ink-2);line-height:1.35;min-width:0}
+  .mstart .btn{flex:none}
+  #setup{padding-bottom:84px}
+  .topbar{padding:8px 12px}
+  .topbar .in{flex-wrap:nowrap;gap:8px}
+  .topbar .name{min-width:0;flex:1}
+  .topbar .name b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--body);font-weight:600}
+  .topbar .name small{display:none}
+  .timer{padding:4px 8px;flex:none}
+  .timer .eyebrow{display:none}
+  .timer .num{font-size:17px}
+  #submit-btn{padding:6px 12px;min-height:40px;flex:none}
+  .exam{margin-top:12px;gap:12px}
+  .qcard{padding:16px 14px;border-radius:12px}
+  .qtext{font-size:17.5px;margin-bottom:14px}
+  .choice{font-size:16px;padding:10px 12px;grid-template-columns:32px 1fr;gap:10px}
+  .choice .bub{width:30px;height:30px;font-size:14px}
+  .kbd{display:none}
+  .pal-toggle{display:inline-flex;min-height:34px;padding:4px 10px;font-size:13.5px;border-radius:999px}
+  .qactions{position:fixed;left:0;right:0;bottom:0;z-index:6;margin:0;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+  .qactions .grp{display:contents}
+  .qactions .btn{min-height:48px;padding:4px 6px;justify-content:center;text-align:center;font-size:13.5px;line-height:1.2}
+  #exam{padding-bottom:84px}
+  .side{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:12;max-height:78vh;overflow:auto;background:var(--bg);border-radius:18px 18px 0 0;padding:12px 12px calc(14px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .22s ease;box-shadow:0 -8px 30px rgba(0,0,0,.25)}
+  .side.open{transform:none}
+  .sheet-head{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 4px;position:sticky;top:-12px;background:var(--bg);z-index:1}
+  .sheet-head .btn{min-height:36px;padding:4px 12px}
+  .sheet-bg{display:block;position:fixed;inset:0;z-index:11;background:rgba(10,15,25,.5)}
+  .sheet-bg[hidden]{display:none}
+  .side .palette{max-height:none;grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}
+  .pal{height:42px}
+  body.sheet-open{overflow:hidden}
+  .result-head{grid-template-columns:auto 1fr;gap:14px;padding-block:18px 14px}
+  .score-ring{width:104px;height:104px}
+  .score-ring::after{inset:9px}
+  .score-ring b{font-size:24px}
+  .result-head h1{font-size:22px}
+  .result-head p{font-size:14px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:8px}
+  .stat{padding:10px 12px}
+  .stat b{font-size:20px}
+  .bar{grid-template-columns:96px 1fr 52px;font-size:13.5px}
+  .rev-item{padding:12px}
+  .modal{padding:18px}
+}
+@media (max-width:360px){ .qactions .btn{font-size:12.5px} .topbar .name b{font-size:14px} }
 </style>
 
 </head>
@@ -254,6 +312,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
       </div>
     </div>
   </div>
+  <div class="mstart" id="mstart"><span id="mstart-sum"></span><button class="btn primary" id="mstart-btn" type="button">शुरू करें →</button></div>
   <p class="note">ये अभ्यास प्रश्नपत्र हैं, आधिकारिक प्रश्नपत्र नहीं। छत्तीसगढ़ समसामयिकी के प्रश्न (हर सेट के प्रश्न 24–25) अक्टूबर 2026 तक उपलब्ध जानकारी पर आधारित हैं। परीक्षा का समय और नकारात्मक अंकन अपनी आधिकारिक परीक्षा-सूचना के अनुसार चुनें। आपके परिणाम केवल इसी ब्राउज़र में सहेजे जाते हैं।</p>
 </section>
 
@@ -270,7 +329,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
     <article class="qcard" aria-live="polite">
       <div class="qhead">
         <span class="qno" id="qno"></span>
-        <span style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip sec" id="qsec" hidden></span><span class="chip" id="qdiff"></span></span>
+        <span style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span class="chip sec" id="qsec" hidden></span><span class="chip" id="qdiff"></span><button class="btn pal-toggle" id="pal-toggle" type="button" aria-controls="side">प्रश्न तालिका</button></span>
       </div>
       <p class="qtext" id="qtext"></p>
       <div class="choices" id="choices" role="radiogroup"></div>
@@ -286,7 +345,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
       <p class="kbd">कीबोर्ड: A–D या 1–4 उत्तर चुनें · → अगला · ← पिछला · M चिह्नित करें</p>
     </article>
 
-    <aside class="side">
+    <div class="sheet-bg" id="sheet-bg" hidden></div>
+    <aside class="side" id="side">
+      <div class="sheet-head"><b>प्रश्न तालिका</b><button class="btn" id="sheet-close" type="button" aria-label="बंद करें">✕</button></div>
       <div class="panel">
         <div class="counts">
           <div><b id="c-ans">0</b><small>उत्तर दिए</small></div>
@@ -435,6 +496,7 @@ function minutes(){ return cfg.time==='auto' ? qCount() : Number(cfg.time); }
 function renderSummary(){
   $('mode-help').textContent = MODE_HELP[cfg.mode];
   const negTxt = cfg.neg ? (cfg.neg===0.25?'¼':'⅓')+' अंक कटेगा' : 'नहीं';
+  const ms=$('mstart-sum'); if(ms) ms.textContent = `${nameOf(cfg.set)} · ${qCount()} प्रश्न · ${minutes()} मिनट`;
   $('summary').innerHTML = `<span><b>${cfg.mode==='practice'?'अभ्यास मोड':'परीक्षा मोड'}</b> · <b>${nameOf(cfg.set)}</b> · <b class="num">${qCount()}</b> प्रश्न · <b class="num">${minutes()}</b> मिनट</span><span>नकारात्मक अंकन: ${negTxt}</span>`;
 }
 function saveCfg(){ store.set('cspdcl-cfg', cfg); }
@@ -481,9 +543,9 @@ function buildTest(){
 }
 function startTest(t){
   T = t; store.set('cspdcl-active', T);
-  show('exam');
-  $('ex-title').textContent = 'CSPDCL DEO / स्टेनो · ' + T.name;
-  $('ex-sub').textContent = `${T.cfg.mode==='practice'?'अभ्यास मोड':'परीक्षा मोड'} · ${T.idx.length} प्रश्न · ${Math.round(T.total/60)} मिनट · नकारात्मक अंकन: ${T.cfg.neg? (T.cfg.neg===0.25?'¼':'⅓') : 'नहीं'}`;
+  show('exam'); window.scrollTo(0,0); closeSheet();
+  $('ex-title').textContent = T.name;
+  $('ex-sub').textContent = `CSPDCL DEO / स्टेनो · ${T.cfg.mode==='practice'?'अभ्यास मोड':'परीक्षा मोड'} · ${T.idx.length} प्रश्न · ${Math.round(T.total/60)} मिनट · नकारात्मक अंकन: ${T.cfg.neg? (T.cfg.neg===0.25?'¼':'⅓') : 'नहीं'}`;
   renderQ(); clearInterval(tick); tick = setInterval(updateClock, 500); updateClock();
 }
 function updateClock(){
@@ -533,7 +595,9 @@ function renderQ(){
   renderPalette(); persist();
 }
 function choose(k){ if (T.cfg.mode==='practice' && T.ans[T.cur]!==null) return; T.ans[T.cur] = k; renderQ(); }
-function go(i){ if(i<0||i>=T.idx.length) return; T.cur=i; renderQ(); window.scrollTo({top:0, behavior:'smooth'}); }
+function go(i){ if(i<0||i>=T.idx.length) return; T.cur=i; closeSheet(); renderQ(); window.scrollTo({top:0, behavior:'smooth'}); }
+function openSheet(){ $('side').classList.add('open'); $('sheet-bg').hidden=false; document.body.classList.add('sheet-open'); const c=document.querySelector('.pal.cur'); if(c) c.scrollIntoView({block:'center'}); }
+function closeSheet(){ const s=$('side'); if(!s) return; s.classList.remove('open'); $('sheet-bg').hidden=true; document.body.classList.remove('sheet-open'); }
 function renderPalette(){
   const box=$('palette');
   const key = T.started+':'+T.idx.length;
@@ -552,6 +616,7 @@ function renderPalette(){
   const cb = box.querySelectorAll('.pal')[T.cur];
   if (cb){ const top=cb.offsetTop-box.offsetTop, h=box.clientHeight; if (top<box.scrollTop || top+cb.offsetHeight>box.scrollTop+h) box.scrollTop=Math.max(0, top-h/2); }
   const answered = T.ans.filter(a=>a!==null).length;
+  $('pal-toggle').textContent = `तालिका · ${answered}/${T.idx.length}`;
   $('c-ans').textContent = answered; $('c-rev').textContent = T.rev.filter(Boolean).length; $('c-left').textContent = T.idx.length-answered;
   $('prog').style.width = (answered/T.idx.length*100)+'%';
 }
@@ -656,6 +721,10 @@ document.addEventListener('keydown', e=>{
   else if (k==='M') { T.rev[T.cur]=!T.rev[T.cur]; renderQ(); }
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('confirm').hidden) $('confirm').hidden=true; });
+
+$('pal-toggle').onclick = openSheet; $('sheet-bg').onclick = closeSheet; $('sheet-close').onclick = closeSheet;
+$('mstart-btn').onclick = ()=> $('start').click();
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
 
 // ---------- boot ----------
 renderSets(); seg('seg-mode', MODE_OPTS, 'mode'); seg('seg-count', COUNT_OPTS, 'count'); seg('seg-time', TIME_OPTS, 'time'); seg('seg-neg', NEG_OPTS, 'neg'); renderSummary(); renderHistory();
