@@ -268,6 +268,15 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
   .modal{padding:18px}
 }
 @media (max-width:360px){ .qactions .btn{font-size:12.5px} .topbar .name b{font-size:14px} }
+
+.inp{font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);width:100%}
+.inp:focus{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.scorecard-panel{margin-bottom:16px}
+.sc-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn.wa{background:#1F8F4E;border-color:#1F8F4E;color:#fff}
+.sheet-status{margin:12px 0 0;font-size:14.5px;padding:8px 12px;border-radius:8px;background:var(--surface-2);color:var(--ink-2)}
+.sheet-status.ok{background:var(--ok-soft);color:var(--ok)} .sheet-status.fail{background:var(--warn-soft);color:var(--warn)}
+@media (max-width:860px){ .sc-actions .btn{flex:1 1 100%;justify-content:center} }
 </style>
 
 </head>
@@ -293,6 +302,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
       <h2>परीक्षा की शर्तें</h2>
       <p class="sub">अपनी परीक्षा के पैटर्न के अनुसार बदलें।</p>
       <div class="opts">
+        <div class="field"><span>आपका नाम</span><input class="inp" id="st-name" maxlength="40" placeholder="जैसे: राहुल वर्मा" autocomplete="name"></div>
+        <div class="field"><span>मोबाइल नंबर <small style="font-weight:400;color:var(--ink-3)">(वैकल्पिक)</small></span><input class="inp" id="st-mob" inputmode="numeric" maxlength="10" placeholder="10 अंकों का नंबर" autocomplete="tel"><small id="st-note" style="color:var(--ink-3);font-size:13px" hidden>परीक्षा जमा करने पर आपका नाम और अंक शिक्षक के रिकॉर्ड में भेजे जाएँगे।</small></div>
         <div class="field"><span>मोड</span><div class="seg" id="seg-mode"></div><small id="mode-help" style="color:var(--ink-3);font-size:13.5px"></small></div>
         <div class="field"><span>प्रश्नों की संख्या</span><div class="seg" id="seg-count"></div></div>
         <div class="field"><span>समय</span><div class="seg" id="seg-time"></div></div>
@@ -381,6 +392,15 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
     </div>
   </div>
   <div class="stats" id="stats"></div>
+  <div class="panel scorecard-panel">
+    <h2 style="font-size:20px;margin-bottom:4px">अपना स्कोरकार्ड सहेजें</h2>
+    <p class="sub" style="margin:0 0 12px">स्कोरकार्ड फ़ोटो की तरह आपके फ़ोन में सहेजा जाएगा, या सीधे WhatsApp पर भेजें।</p>
+    <div class="sc-actions">
+      <button class="btn primary" id="sc-download" type="button">⬇ स्कोरकार्ड डाउनलोड करें</button>
+      <button class="btn wa" id="sc-share" type="button">WhatsApp पर भेजें</button>
+    </div>
+    <p class="sheet-status" id="sheet-status" hidden></p>
+  </div>
   <div class="grid2">
     <div class="panel"><h2 style="font-size:20px;margin-bottom:12px">कठिनाई-स्तर के अनुसार</h2><div class="bars" id="bars-diff"></div></div>
     <div class="panel"><h2 style="font-size:20px;margin-bottom:12px" id="bars-set-h">सेट के अनुसार</h2><div class="bars" id="bars-set"></div></div>
@@ -667,7 +687,10 @@ function renderResult(R){
     h.unshift({name:R.name, score, total:n, pct, at:R.submitted}); store.set('cspdcl-history', h.slice(0,20));
     const best = store.get('cspdcl-best') || {}; if (n>=25 && (best[R.cfg.set]==null || pct>best[R.cfg.set])) { best[R.cfg.set]=pct; store.set('cspdcl-best', best); }
     R.saved = true;
+    sendToSheet(R, {score, n, pct, ok, bad, skip, used, byS});
   }
+  lastCard = {R, score, n, pct, ok, bad, skip, acc, used, secs: Object.keys(byS).sort((a,b)=>a-b).map(s=>[R.sections ? R.sections[s].short : DATA.short[s], byS[s][0], byS[s][1]])};
+  showSheetStatus(R);
   filter='all'; renderFilters(); renderReview();
 }
 function bar(label, a, t){ const p=Math.round(a/t*100); return `<div class="bar"><span>${label}</span><span class="track"><i style="width:${p}%"></i></span><span class="v num">${a}/${t}</span></div>`; }
@@ -725,6 +748,74 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('confirm').h
 $('pal-toggle').onclick = openSheet; $('sheet-bg').onclick = closeSheet; $('sheet-close').onclick = closeSheet;
 $('mstart-btn').onclick = ()=> $('start').click();
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
+
+
+// ---------- student + scorecard + sheet ----------
+const SHEET_URL = '';   // Google Apps Script Web App URL (सेट करने पर अंक शिक्षक की Google Sheet में जाएँगे)
+const SITE_URL = 'https://tiku0407.github.io/cg-mock-test/';
+let lastCard = null;
+const student = Object.assign({name:'', mob:''}, store.get('cspdcl-student') || {});
+$('st-name').value = student.name; $('st-mob').value = student.mob;
+$('st-name').oninput = e => { student.name = e.target.value.trim(); store.set('cspdcl-student', student); };
+$('st-mob').oninput = e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,10); student.mob = e.target.value; store.set('cspdcl-student', student); };
+if (SHEET_URL) $('st-note').hidden = false;
+function stName(){ return student.name || 'विद्यार्थी'; }
+function sendToSheet(R, s){
+  if (!SHEET_URL) return;
+  R.sheet = 'sending';
+  const secTxt = Object.keys(s.byS).sort((a,b)=>a-b).map(k=>`${R.sections ? R.sections[k].short : DATA.short[k]} ${s.byS[k][0]}/${s.byS[k][1]}`).join(', ');
+  const body = JSON.stringify({ name: student.name || '(नाम नहीं)', mobile: student.mob || '', set: R.name,
+    mode: R.cfg.mode==='practice'?'अभ्यास':'परीक्षा', score: s.score, total: s.n, pct: s.pct, correct: s.ok, wrong: s.bad, skipped: s.skip,
+    time_min: Math.round(s.used/60), neg: R.cfg.neg||0, sections: secTxt, submitted: new Date(R.submitted).toLocaleString('hi-IN') });
+  fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body})
+    .then(()=>{ R.sheet='ok'; showSheetStatus(R); })
+    .catch(()=>{ R.sheet='fail'; showSheetStatus(R); });
+}
+function showSheetStatus(R){
+  const el = $('sheet-status');
+  if (!SHEET_URL || !R.sheet){ el.hidden = true; return; }
+  el.hidden = false;
+  el.className = 'sheet-status ' + R.sheet;
+  el.textContent = R.sheet==='ok' ? '✓ आपका स्कोर शिक्षक के रिकॉर्ड में सहेज दिया गया है।' : R.sheet==='fail' ? 'इंटरनेट न होने से स्कोर शिक्षक को नहीं भेजा जा सका। स्कोरकार्ड डाउनलोड करके भेज दें।' : 'स्कोर शिक्षक को भेजा जा रहा है…';
+}
+function cardText(){ const c=lastCard; return `मैंने ${c.R.name} में ${c.score}/${c.n} (${c.pct}%) अंक प्राप्त किए। सही ${c.ok}, गलत ${c.bad}, छोड़े ${c.skip}।\nCSPDCL DEO / स्टेनोग्राफर मॉक टेस्ट: ${SITE_URL}`; }
+async function drawCard(){
+  const c = lastCard, W=1080, H=1350, cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const x = cv.getContext('2d');
+  try { await document.fonts.load('700 40px Mukta'); await document.fonts.load('400 40px Mukta'); } catch(e){}
+  const F = (w,s) => `${w} ${s}px Mukta, "Noto Sans Devanagari", "Nirmala UI", sans-serif`;
+  x.fillStyle='#F3F5F8'; x.fillRect(0,0,W,H);
+  x.fillStyle='#B8265A'; x.fillRect(0,0,W,210);
+  x.fillStyle='#fff'; x.font=F(700,46); x.fillText('CSPDCL DEO / स्टेनोग्राफर ग्रेड-III', 60, 95);
+  x.font=F(400,32); x.fillText('ऑनलाइन मॉक टेस्ट — स्कोरकार्ड', 60, 150);
+  x.fillStyle='#fff'; x.beginPath(); x.roundRect(40,250,W-80,1000,28); x.fill();
+  x.fillStyle='#17223B'; x.font=F(700,52); x.fillText(stName().slice(0,28), 90, 345);
+  x.fillStyle='#4A5673'; x.font=F(400,30);
+  x.fillText(c.R.name.slice(0,48), 90, 395);
+  x.fillText(new Date(c.R.submitted).toLocaleString('hi-IN',{dateStyle:'long',timeStyle:'short'}) + ' · ' + (c.R.cfg.mode==='practice'?'अभ्यास मोड':'परीक्षा मोड'), 90, 440);
+  // ring
+  const cx=270, cy=640, r=140;
+  x.lineWidth=34; x.strokeStyle='#E9EDF3'; x.beginPath(); x.arc(cx,cy,r,0,Math.PI*2); x.stroke();
+  x.strokeStyle='#B8265A'; x.beginPath(); x.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.max(0.002,c.pct/100)); x.stroke();
+  x.fillStyle='#17223B'; x.textAlign='center'; x.font=F(700,76); x.fillText(String(c.score), cx, cy+18);
+  x.font=F(400,28); x.fillStyle='#4A5673'; x.fillText(`${c.n} में से · ${c.pct}%`, cx, cy+62); x.textAlign='left';
+  const st=[['सही',c.ok,'#1C7A4B'],['गलत',c.bad,'#B42318'],['छोड़े गए',c.skip,'#7A849B'],['लगा समय',`${Math.floor(c.used/60)} मि`,'#17223B']];
+  st.forEach(([l,v,col],i)=>{ const y=520+i*80; x.fillStyle=col; x.font=F(700,46); x.fillText(String(v), 520, y+10); x.fillStyle='#4A5673'; x.font=F(400,30); x.fillText(l, 700, y+8); });
+  x.fillStyle='#17223B'; x.font=F(700,34); x.fillText('भाग-वार प्रदर्शन', 90, 880);
+  c.secs.slice(0,6).forEach(([l,a,t],i)=>{ const y=930+i*50; x.fillStyle='#17223B'; x.font=F(400,28); x.fillText(l, 90, y+10);
+    x.fillStyle='#E9EDF3'; x.beginPath(); x.roundRect(380,y-8,480,22,11); x.fill();
+    x.fillStyle='#B8265A'; x.beginPath(); x.roundRect(380,y-8,Math.max(6,480*a/t),22,11); x.fill();
+    x.fillStyle='#4A5673'; x.textAlign='right'; x.fillText(`${a}/${t}`, 990, y+10); x.textAlign='left'; });
+  x.fillStyle='#4A5673'; x.font=F(400,28); x.textAlign='center'; x.fillText(SITE_URL, W/2, 1310); x.textAlign='left';
+  return cv;
+}
+async function cardFile(){ const cv = await drawCard(); return new Promise(res=>cv.toBlob(b=>res(new File([b], `scorecard-${Date.now()}.png`, {type:'image/png'})), 'image/png')); }
+$('sc-download').onclick = async ()=>{ if(!lastCard) return; const f = await cardFile(); const a=document.createElement('a'); a.href=URL.createObjectURL(f); a.download=f.name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1500); };
+$('sc-share').onclick = async ()=>{
+  if(!lastCard) return;
+  try { const f = await cardFile(); if (navigator.canShare && navigator.canShare({files:[f]})) { await navigator.share({files:[f], text: cardText()}); return; } } catch(e){ if (e && e.name==='AbortError') return; }
+  window.open('https://wa.me/?text='+encodeURIComponent(cardText()), '_blank');
+};
 
 // ---------- boot ----------
 renderSets(); seg('seg-mode', MODE_OPTS, 'mode'); seg('seg-count', COUNT_OPTS, 'count'); seg('seg-time', TIME_OPTS, 'time'); seg('seg-neg', NEG_OPTS, 'neg'); renderSummary(); renderHistory();
