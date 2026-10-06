@@ -751,7 +751,7 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
 
 
 // ---------- student + scorecard + sheet ----------
-const SHEET_URL = '';   // Google Apps Script Web App URL (सेट करने पर अंक शिक्षक की Google Sheet में जाएँगे)
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzYENIKHd9yJZuxaX2NvIvM3Sazjifcf6QQUsdC8IB9izCDeCR2Fq2suE8l_uWiMk6cxw/exec';   // Google Apps Script Web App URL (सेट करने पर अंक शिक्षक की Google Sheet में जाएँगे)
 const SITE_URL = 'https://tiku0407.github.io/cg-mock-test/';
 let lastCard = null;
 const student = Object.assign({name:'', mob:''}, store.get('cspdcl-student') || {});
