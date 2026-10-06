@@ -277,6 +277,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
 .sheet-status{margin:12px 0 0;font-size:14.5px;padding:8px 12px;border-radius:8px;background:var(--surface-2);color:var(--ink-2)}
 .sheet-status.ok{background:var(--ok-soft);color:var(--ok)} .sheet-status.fail{background:var(--warn-soft);color:var(--warn)}
 @media (max-width:860px){ .sc-actions .btn{flex:1 1 100%;justify-content:center} }
+.req{color:var(--bad)} .err{color:var(--bad);font-size:13.5px;font-weight:600} .inp.bad{border-color:var(--bad);background:var(--bad-soft)}
 </style>
 
 </head>
@@ -302,8 +303,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
       <h2>परीक्षा की शर्तें</h2>
       <p class="sub">अपनी परीक्षा के पैटर्न के अनुसार बदलें।</p>
       <div class="opts">
-        <div class="field"><span>आपका नाम</span><input class="inp" id="st-name" maxlength="40" placeholder="जैसे: राहुल वर्मा" autocomplete="name"></div>
-        <div class="field"><span>मोबाइल नंबर <small style="font-weight:400;color:var(--ink-3)">(वैकल्पिक)</small></span><input class="inp" id="st-mob" inputmode="numeric" maxlength="10" placeholder="10 अंकों का नंबर" autocomplete="tel"><small id="st-note" style="color:var(--ink-3);font-size:13px" hidden>परीक्षा जमा करने पर आपका नाम और अंक शिक्षक के रिकॉर्ड में भेजे जाएँगे।</small></div>
+        <div class="field"><span>आपका नाम <b class="req">*</b></span><input class="inp" id="st-name" required maxlength="40" placeholder="जैसे: राहुल वर्मा" autocomplete="name"><small class="err" id="err-name" hidden></small></div>
+        <div class="field"><span>मोबाइल नंबर <b class="req">*</b></span><input class="inp" id="st-mob" required type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का नंबर" autocomplete="tel"><small class="err" id="err-mob" hidden></small><small id="st-note" style="color:var(--ink-3);font-size:13px" hidden>परीक्षा जमा करने पर आपका नाम और अंक शिक्षक के रिकॉर्ड में भेजे जाएँगे।</small></div>
         <div class="field"><span>मोड</span><div class="seg" id="seg-mode"></div><small id="mode-help" style="color:var(--ink-3);font-size:13.5px"></small></div>
         <div class="field"><span>प्रश्नों की संख्या</span><div class="seg" id="seg-count"></div></div>
         <div class="field"><span>समय</span><div class="seg" id="seg-time"></div></div>
@@ -722,7 +723,7 @@ function renderReview(){
 
 // ---------- navigation ----------
 function show(id){ for (const s of ['setup','exam','result']) $(s).hidden = s!==id; }
-$('start').onclick = ()=> startTest(buildTest());
+$('start').onclick = ()=> { if (validStudent()) startTest(buildTest()); };
 $('prev').onclick = ()=> go(T.cur-1);
 $('next').onclick = ()=> go(T.cur+1);
 $('clear').onclick = ()=> { if (T.cfg.mode==='practice') return; T.ans[T.cur]=null; renderQ(); };
@@ -756,15 +757,24 @@ const SITE_URL = 'https://tiku0407.github.io/cg-mock-test/';
 let lastCard = null;
 const student = Object.assign({name:'', mob:''}, store.get('cspdcl-student') || {});
 $('st-name').value = student.name; $('st-mob').value = student.mob;
-$('st-name').oninput = e => { student.name = e.target.value.trim(); store.set('cspdcl-student', student); };
-$('st-mob').oninput = e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,10); student.mob = e.target.value; store.set('cspdcl-student', student); };
-if (SHEET_URL) $('st-note').hidden = false;
+$('st-name').oninput = e => { student.name = e.target.value.trim(); store.set('cspdcl-student', student); $('err-name').hidden = true; e.target.classList.remove('bad'); };
+$('st-mob').oninput = e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,10); student.mob = e.target.value; store.set('cspdcl-student', student); $('err-mob').hidden = true; e.target.classList.remove('bad'); };
+$('st-note').hidden = false;
+function validStudent(){
+  const nm = (student.name||'').trim(), mb = student.mob||'';
+  const okN = nm.replace(/\s/g,'').length >= 2, okM = /^[6-9]\d{9}$/.test(mb);
+  $('err-name').hidden = okN; $('err-name').textContent = 'कृपया अपना पूरा नाम लिखें।';
+  $('err-mob').hidden = okM; $('err-mob').textContent = mb ? 'कृपया सही 10 अंकों का मोबाइल नंबर लिखें (6, 7, 8 या 9 से शुरू)।' : 'कृपया अपना मोबाइल नंबर लिखें।';
+  $('st-name').classList.toggle('bad', !okN); $('st-mob').classList.toggle('bad', !okM);
+  if (!okN || !okM){ const f = !okN ? $('st-name') : $('st-mob'); f.scrollIntoView({block:'center', behavior:'smooth'}); setTimeout(()=>f.focus({preventScroll:true}), 300); return false; }
+  return true;
+}
 function stName(){ return student.name || 'विद्यार्थी'; }
 function sendToSheet(R, s){
   if (!SHEET_URL) return;
   R.sheet = 'sending';
   const secTxt = Object.keys(s.byS).sort((a,b)=>a-b).map(k=>`${R.sections ? R.sections[k].short : DATA.short[k]} ${s.byS[k][0]}/${s.byS[k][1]}`).join(', ');
-  const body = JSON.stringify({ name: student.name || '(नाम नहीं)', mobile: student.mob || '', set: R.name,
+  const body = JSON.stringify({ name: student.name, mobile: student.mob, set: R.name,
     mode: R.cfg.mode==='practice'?'अभ्यास':'परीक्षा', score: s.score, total: s.n, pct: s.pct, correct: s.ok, wrong: s.bad, skipped: s.skip,
     time_min: Math.round(s.used/60), neg: R.cfg.neg||0, sections: secTxt, submitted: new Date(R.submitted).toLocaleString('hi-IN') });
   fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body})
