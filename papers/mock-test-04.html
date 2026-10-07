@@ -40,7 +40,7 @@ ol.four{grid-template-columns:repeat(4,minmax(0,1fr))} ol.two{grid-template-colu
 .foot{text-align:center;color:var(--ink2);font-size:13px;margin-top:24px}
 @media (max-width:640px){ table{font-size:13.5px} th,td{padding:5px 7px} td:first-child{white-space:nowrap} .tools{padding:0 10px;margin-top:10px} .tools button{padding:8px 12px;font-size:14px} .q p{font-size:15.5px} ol.four li,ol.two li{font-size:15px}.sheet{padding:18px 14px;margin:10px} ol.four{grid-template-columns:repeat(2,minmax(0,1fr))} ol.two{grid-template-columns:1fr} .grid{grid-template-columns:repeat(5,minmax(0,1fr))} h1{font-size:22px} .top{flex-direction:column}}
 @media print{body{background:#fff;color:#000} .tools{display:none} .sheet{border:0;margin:0;max-width:none;padding:0} h2.sec{-webkit-print-color-adjust:exact;print-color-adjust:exact} @page{size:A4;margin:14mm}}
-</style></head><body>
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.82em;line-height:1.1;margin:0 .12em}.frac>.fn{border-bottom:1.3px solid currentColor;padding:0 .2em}.frac>.fd{padding:0 .2em}.frac .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}</style></head><body>
 <div class="tools"><button class="g" id="tk">उत्तर-कुंजी छिपाएँ</button><button onclick="window.print()">प्रिंट / PDF सहेजें</button></div>
 <main class="sheet">
 <div class="top"><div><h1>भर्ती परीक्षा मॉक टेस्ट — CSPDCL डेटा एंट्री ऑपरेटर एवं स्टेनोग्राफर ग्रेड-III</h1>
@@ -110,7 +110,7 @@ ol.four{grid-template-columns:repeat(4,minmax(0,1fr))} ol.two{grid-template-colu
 <h2 class="sec"><span>खंड D</span>सामान्य गणित <small>(15 अंक)</small></h2>
 <div class="q"><p><b>56.</b> 5 मिलीग्राम को किलोग्राम में बदलिए। <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 0.005 किग्रा</li><li><b>(B)</b> 0.00005 किग्रा</li><li><b>(C)</b> 0.000005 किग्रा</li><li><b>(D)</b> 0.0005 किग्रा</li></ol></div>
 <div class="q"><p><b>57.</b> चार अंकों की सबसे छोटी पूर्ण वर्ग संख्या कौन-सी है? <span class="d">[मध्यम]</span></p><ol class="four"><li><b>(A)</b> 1000</li><li><b>(B)</b> 1024</li><li><b>(C)</b> 1089</li><li><b>(D)</b> 1156</li></ol></div>
-<div class="q"><p><b>58.</b> निम्नलिखित में सबसे बड़ी भिन्न कौन-सी है? <span class="d">[मध्यम]</span></p><ol class="four"><li><b>(A)</b> 4/7</li><li><b>(B)</b> 5/9</li><li><b>(C)</b> 7/12</li><li><b>(D)</b> 3/5</li></ol></div>
+<div class="q"><p><b>58.</b> निम्नलिखित में सबसे बड़ी भिन्न कौन-सी है? <span class="d">[मध्यम]</span></p><ol class="four"><li><b>(A)</b> <span class="frac"><span class="fn">4</span><span class="sr">/</span><span class="fd">7</span></span></li><li><b>(B)</b> <span class="frac"><span class="fn">5</span><span class="sr">/</span><span class="fd">9</span></span></li><li><b>(C)</b> <span class="frac"><span class="fn">7</span><span class="sr">/</span><span class="fd">12</span></span></li><li><b>(D)</b> <span class="frac"><span class="fn">3</span><span class="sr">/</span><span class="fd">5</span></span></li></ol></div>
 <div class="q"><p><b>59.</b> √7.29 का मान क्या है? <span class="d">[मध्यम]</span></p><ol class="four"><li><b>(A)</b> 0.27</li><li><b>(B)</b> 2.7</li><li><b>(C)</b> 27</li><li><b>(D)</b> 2.07</li></ol></div>
 <div class="q"><p><b>60.</b> तीन संख्याएँ 1 : 2 : 3 के अनुपात में हैं और उनका HCF 12 है। उनका LCM क्या है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 36</li><li><b>(B)</b> 72</li><li><b>(C)</b> 144</li><li><b>(D)</b> 216</li></ol></div>
 <div class="q"><p><b>61.</b> वह सबसे छोटी संख्या कौन-सी है जिसे 6, 9 और 15 से भाग देने पर हर बार शेष 4 बचे? <span class="d">[मध्यम]</span></p><ol class="four"><li><b>(A)</b> 49</li><li><b>(B)</b> 94</li><li><b>(C)</b> 184</li><li><b>(D)</b> 274</li></ol></div>
@@ -213,12 +213,12 @@ ol.four{grid-template-columns:repeat(4,minmax(0,1fr))} ol.two{grid-template-colu
 <p><b>51. (B) केवल I</b> — जो लकड़ी की वस्तुएँ मेज हैं, वे कुर्सी नहीं हो सकतीं — I निश्चित है। अन्य लकड़ी की वस्तुएँ कुर्सी हो सकती हैं, इसलिए II निश्चित नहीं।</p>
 <p><b>52. (C) B</b> — बाएँ से दाएँ क्रम: E, D, B, A, C — बीच में B है।</p>
 <p><b>53. (B) 33</b> — 2 से विभाज्य 50, 3 से 33, दोनों (6) से 16। विभाज्य = 50 + 33 − 16 = 67; शेष = 100 − 67 = 33।</p>
-<p><b>54. (B) 35 वर्ष</b> — A − 5 = 3k, B − 5 = 4k; (3k + 10)/(4k + 10) = 4/5 ⇒ k = 10; A = 35 वर्ष।</p>
+<p><b>54. (B) 35 वर्ष</b> — A − 5 = 3k, B − 5 = 4k; (3k + 10)/(4k + 10) = <span class="frac"><span class="fn">4</span><span class="sr">/</span><span class="fd">5</span></span> ⇒ k = 10; A = 35 वर्ष।</p>
 <p><b>55. (B) I25</b> — अक्षर एक-एक छोड़कर (A, C, E, G, I) और संख्याएँ पूर्ण वर्ग (1, 4, 9, 16, 25)।</p>
 <h3>खंड D — सामान्य गणित</h3>
 <p><b>56. (C) 0.000005 किग्रा</b> — 1 किग्रा = 10⁶ मिग्रा; 5 मिग्रा = 5 × 10⁻⁶ = 0.000005 किग्रा।</p>
 <p><b>57. (B) 1024</b> — 31² = 961 (तीन अंक) और 32² = 1024 — चार अंकों का सबसे छोटा पूर्ण वर्ग।</p>
-<p><b>58. (D) 3/5</b> — दशमलव में: 4/7 ≈ 0.571, 5/9 ≈ 0.556, 7/12 ≈ 0.583, 3/5 = 0.6 — सबसे बड़ी 3/5।</p>
+<p><b>58. (D) <span class="frac"><span class="fn">3</span><span class="sr">/</span><span class="fd">5</span></span></b> — दशमलव में: <span class="frac"><span class="fn">4</span><span class="sr">/</span><span class="fd">7</span></span> ≈ 0.571, <span class="frac"><span class="fn">5</span><span class="sr">/</span><span class="fd">9</span></span> ≈ 0.556, <span class="frac"><span class="fn">7</span><span class="sr">/</span><span class="fd">12</span></span> ≈ 0.583, <span class="frac"><span class="fn">3</span><span class="sr">/</span><span class="fd">5</span></span> = 0.6 — सबसे बड़ी <span class="frac"><span class="fn">3</span><span class="sr">/</span><span class="fd">5</span></span>।</p>
 <p><b>59. (B) 2.7</b> — 2.7 × 2.7 = 7.29।</p>
 <p><b>60. (B) 72</b> — संख्याएँ 12, 24, 36 हैं; इनका LCM = 72।</p>
 <p><b>61. (B) 94</b> — LCM(6, 9, 15) = 90; अभीष्ट संख्या = 90 + 4 = 94।</p>

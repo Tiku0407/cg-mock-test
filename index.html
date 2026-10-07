@@ -278,6 +278,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
 .sheet-status.ok{background:var(--ok-soft);color:var(--ok)} .sheet-status.fail{background:var(--warn-soft);color:var(--warn)}
 @media (max-width:860px){ .sc-actions .btn{flex:1 1 100%;justify-content:center} }
 .req{color:var(--bad)} .err{color:var(--bad);font-size:13.5px;font-weight:600} .inp.bad{border-color:var(--bad);background:var(--bad-soft)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.82em;line-height:1.1;margin:0 .12em;font-variant-numeric:lining-nums}
+.frac>.fn{border-bottom:1.5px solid currentColor;padding:0 .2em}.frac>.fd{padding:0 .2em}.frac .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 
 </head>
@@ -461,6 +463,13 @@ const cgNo = c => Number(String(c.set).slice(3));
 const isFull = c => c.set==='full' || isCG(c);
 function nameOf(set){ if (typeof set==='string' && set.startsWith('cg:')){ const m=CG_META[Number(set.slice(3))]; return (m&&m.label) || 'CG व्याख्याता सेट '+String(set.slice(3)).padStart(2,'0'); } return set===0 ? 'मिश्रित अभ्यास' : 'भाग '+set+': '+DATA.short[set]; }
 const $ = id => document.getElementById(id);
+/* गणित की भिन्नों (3/8, 1 3/8) को ऊपर-नीचे (अंश/हर) रूप में दिखाता है; बाकी पाठ सुरक्षित रूप से escape होता है */
+const FRAC_RE = /(^|[^\d\/.,])(?:(\d+)\s+)?(\d+)\/(\d+)(?![\d\/])/g;
+const escH = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function setMath(el, t){
+  el.innerHTML = escH(t).replace(FRAC_RE, (m, pre, w, n, d) =>
+    `${pre}${w ? w + '\u2009' : ''}<span class="frac"><span class="fn">${n}</span><span class="sr">/</span><span class="fd">${d}</span></span>`);
+}
 const store = {
   get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } },
   set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
@@ -583,13 +592,13 @@ function renderQ(){
   const sec = secOf(T, i), qs = $('qsec'); qs.hidden = !sec; if (sec) qs.textContent = `भाग ${T.sections.indexOf(sec)+1}: ${sec.short}`;
   $('qno').textContent = `प्रश्न ${i+1} / ${T.idx.length}`;
   const d=$('qdiff'); d.hidden = q[1]<0; if (q[1]>=0){ d.textContent = DIFF[q[1]]; d.className='chip d'+q[1]; }
-  $('qtext').textContent = q[2];
+  setMath($('qtext'), q[2]);
   const box = $('choices'); box.innerHTML='';
   const practice = T.cfg.mode==='practice', locked = practice && T.ans[i]!==null;
   q[3].forEach((o,k)=>{
     const b=document.createElement('button'); b.type='button'; b.className='choice'; b.setAttribute('role','radio');
     b.setAttribute('aria-checked', T.ans[i]===k);
-    b.innerHTML = `<span class="bub">${LETTERS[k]}</span><span></span>`; b.children[1].textContent = o;
+    b.innerHTML = `<span class="bub">${LETTERS[k]}</span><span></span>`; setMath(b.children[1], o);
     if (locked){
       b.classList.add('locked'); b.setAttribute('aria-checked','false');
       if (k===q[4]){ b.classList.add('correct'); b.insertAdjacentHTML('beforeend','<span class="mk">✓ सही उत्तर</span>'); }
@@ -603,8 +612,8 @@ function renderQ(){
     const ok = T.ans[i]===q[4];
     ex.className = 'explain ' + (ok?'ok':'bad');
     ex.innerHTML = `<span class="verdict">${ok?'✓ सही उत्तर!':'✗ गलत उत्तर'}</span><span class="ans"></span><p class="why"><b>व्याख्या:</b> <span></span></p>`;
-    ex.querySelector('.ans').textContent = `सही उत्तर: (${LETTERS[q[4]]}) ${q[3][q[4]]}`;
-    ex.querySelector('.why span').textContent = q[5];
+    setMath(ex.querySelector('.ans'), `सही उत्तर: (${LETTERS[q[4]]}) ${q[3][q[4]]}`);
+    setMath(ex.querySelector('.why span'), q[5]);
     ex.querySelector('.why').hidden = !q[5];
     ex.hidden = false;
   } else ex.hidden = true;
@@ -712,10 +721,10 @@ function renderReview(){
     const d=document.createElement('div'); d.className='rev-item '+st;
     const tag = st==='ok'?'सही उत्तर':st==='bad'?'गलत उत्तर':'छोड़ा गया';
     d.innerHTML = `<div class="qhead" style="margin:0"><span class="qno">प्रश्न ${i+1}</span><span class="tag">${tag}</span></div><p class="q"></p><ol></ol><p class="why"><b>व्याख्या:</b> <span></span></p>`;
-    d.querySelector('.why span').textContent = q[5]; d.querySelector('.why').hidden = !q[5];
-    d.querySelector('.q').textContent = q[2];
+    setMath(d.querySelector('.why span'), q[5]); d.querySelector('.why').hidden = !q[5];
+    setMath(d.querySelector('.q'), q[2]);
     const ol=d.querySelector('ol');
-    q[3].forEach((o,k)=>{ const li=document.createElement('li'); li.textContent=`(${LETTERS[k]}) ${o}` + (k===q[4]?'  ✓ सही उत्तर':'') + (k===a&&k!==q[4]?'  ✗ आपका उत्तर':''); if(k===q[4]) li.className='right'; else if(k===a) li.className='wrong'; ol.appendChild(li); });
+    q[3].forEach((o,k)=>{ const li=document.createElement('li'); setMath(li, `(${LETTERS[k]}) ${o}` + (k===q[4]?'  ✓ सही उत्तर':'') + (k===a&&k!==q[4]?'  ✗ आपका उत्तर':'')); if(k===q[4]) li.className='right'; else if(k===a) li.className='wrong'; ol.appendChild(li); });
     list.appendChild(d);
   });
   if (!list.childElementCount) list.innerHTML = '<p style="color:var(--ink-3)">इस श्रेणी में कोई प्रश्न नहीं है।</p>';

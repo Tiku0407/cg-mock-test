@@ -88,7 +88,8 @@ p = re.sub(r'उत्तर वितरण: A – \d+ \| B – \d+ \| C – \d
 p = p.replace(f'मॉक टेस्ट {prev:02d}', f'मॉक टेस्ट {NN}')
 p = re.sub(r'CSPDCL मॉक टेस्ट 01–\d\d', f'CSPDCL मॉक टेस्ट 01–{prev:02d}', p)
 p = re.sub(r'100 नए बहुविकल्पीय प्रश्न( \| [^<|]*)?(?=<)', f'100 नए बहुविकल्पीय प्रश्न | {level}', p, count=1)
-(ROOT/f'papers/mock-test-{NN}.html').write_text(p)
+sys.path.insert(0, str(ROOT/'tools')); from fracfmt import frac_html
+(ROOT/f'papers/mock-test-{NN}.html').write_text(frac_html(p))
 md += ["", f"उत्तर वितरण: A {dist['A']} | B {dist['B']} | C {dist['C']} | D {dist['D']}"]
 (ROOT/f'lists/mock-test-{NN}.md').write_text("\n".join(md) + "\n")
 dif = {}
