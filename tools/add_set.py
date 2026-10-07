@@ -91,7 +91,8 @@ p = re.sub(r'100 नए बहुविकल्पीय प्रश्न( \|
 sys.path.insert(0, str(ROOT/'tools')); from fracfmt import frac_html
 (ROOT/f'papers/mock-test-{NN}.html').write_text(frac_html(p))
 md += ["", f"उत्तर वितरण: A {dist['A']} | B {dist['B']} | C {dist['C']} | D {dist['D']}"]
-(ROOT/f'lists/mock-test-{NN}.md').write_text("\n".join(md) + "\n")
+from fracfmt import frac_text
+(ROOT/f'lists/mock-test-{NN}.md').write_text(frac_text("\n".join(md) + "\n"))
 dif = {}
 for s in raw:
     for q in s['qs']: dif[q['d']] = dif.get(q['d'], 0) + 1

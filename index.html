@@ -279,7 +279,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
 @media (max-width:860px){ .sc-actions .btn{flex:1 1 100%;justify-content:center} }
 .req{color:var(--bad)} .err{color:var(--bad);font-size:13.5px;font-weight:600} .inp.bad{border-color:var(--bad);background:var(--bad-soft)}
 .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.82em;line-height:1.1;margin:0 .12em;font-variant-numeric:lining-nums}
-.frac>.fn{border-bottom:1.5px solid currentColor;padding:0 .2em}.frac>.fd{padding:0 .2em}.frac .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.frac>.fn{border-bottom:1.5px solid currentColor;padding:0 .2em}.frac>.fd{padding:0 .2em}.mix{white-space:nowrap;font-weight:600}.mix .frac{margin-left:.08em;font-weight:600}.frac .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 
 </head>
@@ -468,7 +468,7 @@ const FRAC_RE = /(^|[^\d\/.,])(?:(\d+)\s+)?(\d+)\/(\d+)(?![\d\/])/g;
 const escH = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function setMath(el, t){
   el.innerHTML = escH(t).replace(FRAC_RE, (m, pre, w, n, d) =>
-    `${pre}${w ? w + '\u2009' : ''}<span class="frac"><span class="fn">${n}</span><span class="sr">/</span><span class="fd">${d}</span></span>`);
+    `${pre}${w ? '<span class="mix">' + w : ''}<span class="frac"><span class="fn">${n}</span><span class="sr">/</span><span class="fd">${d}</span></span>${w ? '</span>' : ''}`);
 }
 const store = {
   get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } },
