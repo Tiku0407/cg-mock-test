@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CSPDCL DEO / स्टेनोग्राफर — मॉक टेस्ट 08 (प्रश्नपत्र)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17223B;--ink2:#4A5673;--line:#D3DAE4;--acc:#B8265A;--accs:#F8E3EB;--bg:#F3F5F8;--paper:#fff;--sec:#17223B;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#E7EBF3;--ink2:#B3BCCF;--line:#2C3850;--acc:#EC6E98;--accs:#3A1F2C;--bg:#0E1420;--paper:#161E2E;--sec:#2C3850}}
+:root[data-theme="dark"]{--ink:#E7EBF3;--ink2:#B3BCCF;--line:#2C3850;--acc:#EC6E98;--accs:#3A1F2C;--bg:#0E1420;--paper:#161E2E;--sec:#2C3850}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Mukta","Noto Sans Devanagari","Nirmala UI",sans-serif}
+.sheet{max-width:900px;margin:20px auto;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:28px 32px}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:3px solid var(--acc);padding-bottom:12px}
+.badge{background:var(--acc);color:#fff;font-weight:700;border-radius:8px;padding:4px 12px;white-space:nowrap}
+h1{font-family:"Tiro Devanagari Hindi",serif;font-weight:400;font-size:28px;line-height:1.3;margin:0}
+.sub{color:var(--ink2);margin:4px 0 0}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:15px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+th{background:var(--accs)}
+.facts td{text-align:center;font-weight:700} .facts th{text-align:center}
+.ins{background:var(--accs);border-radius:8px;padding:10px 14px;font-size:15px}
+h2.sec{background:var(--sec);color:#fff;font-size:18px;font-weight:600;border-radius:6px;padding:6px 12px;margin:26px 0 10px;break-after:avoid}
+h2.sec span{background:var(--acc);border-radius:4px;padding:0 8px;margin-right:10px}
+h2.sec small{font-weight:400;opacity:.85}
+.q{break-inside:avoid;margin:0 0 12px}
+.q p{margin:0 0 4px}
+.d{color:var(--ink2);font-size:13px}
+ol{list-style:none;margin:0;padding:0 0 0 24px;display:grid;gap:2px 16px}
+ol.four{grid-template-columns:repeat(4,minmax(0,1fr))} ol.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.page{break-before:page;margin-top:34px}
+.grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));border:1px solid var(--line);border-radius:6px;overflow:hidden;font-size:14px}
+.grid div{padding:6px 4px;text-align:center;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.grid div:nth-child(20n+1),.grid div:nth-child(20n+2),.grid div:nth-child(20n+3),.grid div:nth-child(20n+4),.grid div:nth-child(20n+5),.grid div:nth-child(20n+6),.grid div:nth-child(20n+7),.grid div:nth-child(20n+8),.grid div:nth-child(20n+9),.grid div:nth-child(20n+10){background:var(--accs)}
+.ex p{margin:0 0 6px;font-size:15px} .ex h3{color:var(--acc);font-size:17px;margin:18px 0 6px;border-bottom:1px solid var(--line)}
+.tools{max-width:900px;margin:16px auto 0;display:flex;gap:8px;justify-content:flex-end;padding:0 16px}
+.tools button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:8px 16px;background:var(--acc);color:#fff;cursor:pointer}
+.tools button.g{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.hide-key .page{display:none}
+.foot{text-align:center;color:var(--ink2);font-size:13px;margin-top:24px}
+@media (max-width:640px){ table{font-size:13.5px} th,td{padding:5px 7px} td:first-child{white-space:nowrap} .tools{padding:0 10px;margin-top:10px} .tools button{padding:8px 12px;font-size:14px} .q p{font-size:15.5px} ol.four li,ol.two li{font-size:15px}.sheet{padding:18px 14px;margin:10px} ol.four{grid-template-columns:repeat(2,minmax(0,1fr))} ol.two{grid-template-columns:1fr} .grid{grid-template-columns:repeat(5,minmax(0,1fr))} h1{font-size:22px} .top{flex-direction:column}}
+@media print{body{background:#fff;color:#000} .tools{display:none} .sheet{border:0;margin:0;max-width:none;padding:0} h2.sec{-webkit-print-color-adjust:exact;print-color-adjust:exact} @page{size:A4;margin:14mm}}
+</style></head><body>
+<div class="tools"><button class="g" id="tk">उत्तर-कुंजी छिपाएँ</button><button onclick="window.print()">प्रिंट / PDF सहेजें</button></div>
+<main class="sheet">
+<div class="top"><div><h1>भर्ती परीक्षा मॉक टेस्ट — CSPDCL डेटा एंट्री ऑपरेटर एवं स्टेनोग्राफर ग्रेड-III</h1>
+<p class="sub">छत्तीसगढ़ स्टेट पावर कंपनी लिमिटेड (CSPDCL / CSPTCL / CSPGCL) | आधिकारिक Indicative Syllabus पर आधारित | 100 नए बहुविकल्पीय प्रश्न | मिश्रित स्तर</p></div>
+<span class="badge">मॉक टेस्ट 08</span></div>
+<table class="facts"><tr><th>कुल प्रश्न</th><th>कुल अंक</th><th>अभ्यास समय</th><th>नकारात्मक अंक</th></tr><tr><td>100</td><td>100</td><td>120 मिनट</td><td>नहीं</td></tr></table>
+<table><tr><th>खंड</th><th>विषय</th><th>प्रश्न क्रमांक</th><th>अंक</th></tr><tr><td>खंड A</td><td>छत्तीसगढ़ का सामान्य ज्ञान</td><td>1–25</td><td>25</td></tr><tr><td>खंड B</td><td>कम्प्यूटर की सामान्य जानकारी</td><td>26–40</td><td>15</td></tr><tr><td>खंड C</td><td>सामान्य मानसिक योग्यता</td><td>41–55</td><td>15</td></tr><tr><td>खंड D</td><td>सामान्य गणित</td><td>56–70</td><td>15</td></tr><tr><td>खंड E</td><td>सामान्य हिन्दी</td><td>71–90</td><td>20</td></tr><tr><td>खंड F</td><td>सामान्य अंग्रेजी (General English)</td><td>91–100</td><td>10</td></tr><tr><th></th><th>कुल</th><th>1–100</th><th>100</th></tr></table>
+<p class="ins"><b>निर्देश:</b> प्रत्येक प्रश्न के लिए केवल एक सही विकल्प चुनिए। दैनिक मॉक टेस्ट सेट 01–06 और CSPDCL मॉक टेस्ट 01–07 से कोई प्रश्न दोहराया नहीं गया है। पहले पूरा प्रश्नपत्र हल करें, फिर अंत में दी गई उत्तर-कुंजी से मिलान करें।</p>
+<h2 class="sec"><span>खंड A</span>छत्तीसगढ़ का सामान्य ज्ञान <small>(25 अंक)</small></h2>
+<div class="q"><p><b>1.</b> सितंबर 2026 में मुख्यमंत्री विष्णु देव साय ने ‘मदकू द्वीप’ में ₹68.96 करोड़ के विकास कार्यों का लोकार्पण-शिलान्यास किया। मदकू द्वीप किस जिले में स्थित है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> बेमेतरा</li><li><b>(B)</b> कबीरधाम</li><li><b>(C)</b> मुंगेली</li><li><b>(D)</b> जांजगीर-चांपा</li></ol></div>
+<div class="q"><p><b>2.</b> सितंबर 2026 में अंबिकापुर के ‘अग्र महाकुंभ-2026’ में मुख्यमंत्री ने बताया कि राज्य की वर्तमान औद्योगिक विकास नीति के अंतर्गत ₹8.23 लाख करोड़ से अधिक के निवेश प्रस्ताव मिले हैं। यह नीति किस अवधि की है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 2023–28</li><li><b>(B)</b> 2024–29</li><li><b>(C)</b> 2024–30</li><li><b>(D)</b> 2025–30</li></ol></div>
+<div class="q"><p><b>3.</b> ऐतिहासिक ‘चैतुरगढ़ (लाफागढ़)’ किला छत्तीसगढ़ के किस जिले में स्थित है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> रायगढ़</li><li><b>(B)</b> बिलासपुर</li><li><b>(C)</b> जांजगीर-चांपा</li><li><b>(D)</b> कोरबा</li></ol></div>
+<div class="q"><p><b>4.</b> प्राकृतिक गुफाओं और पहाड़ी किले के लिए प्रसिद्ध ‘गढ़िया पहाड़’ किस जिले में है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> कोंडागाँव</li><li><b>(B)</b> धमतरी</li><li><b>(C)</b> नारायणपुर</li><li><b>(D)</b> कांकेर</li></ol></div>
+<div class="q"><p><b>5.</b> ‘घटारानी जलप्रपात’ छत्तीसगढ़ के किस जिले में स्थित है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> कोरबा</li><li><b>(B)</b> गरियाबंद</li><li><b>(C)</b> बस्तर</li><li><b>(D)</b> जशपुर</li></ol></div>
+<div class="q"><p><b>6.</b> बस्तर संभाग का मुख्यालय कहाँ है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> दंतेवाड़ा</li><li><b>(B)</b> कांकेर</li><li><b>(C)</b> जगदलपुर</li><li><b>(D)</b> कोंडागाँव</li></ol></div>
+<div class="q"><p><b>7.</b> पं. रविशंकर शुक्ल विश्वविद्यालय कहाँ स्थित है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> रायपुर</li><li><b>(B)</b> दुर्ग</li><li><b>(C)</b> बिलासपुर</li><li><b>(D)</b> अंबिकापुर</li></ol></div>
+<div class="q"><p><b>8.</b> केंद्रीय विश्वविद्यालय ‘गुरु घासीदास विश्वविद्यालय’ कहाँ स्थित है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> रायपुर</li><li><b>(B)</b> दुर्ग</li><li><b>(C)</b> अंबिकापुर</li><li><b>(D)</b> बिलासपुर</li></ol></div>
+<div class="q"><p><b>9.</b> प्रसिद्ध उद्यान एवं चिड़ियाघर ‘मैत्री बाग’ कहाँ स्थित है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> रायपुर</li><li><b>(B)</b> भिलाई</li><li><b>(C)</b> कोरबा</li><li><b>(D)</b> बिलासपुर</li></ol></div>
+<div class="q"><p><b>10.</b> छत्तीसगढ़ उच्च न्यायालय के प्रथम मुख्य न्यायाधीश कौन थे? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> के. एम. अग्रवाल</li><li><b>(B)</b> आर. एस. गर्ग</li><li><b>(C)</b> डब्ल्यू. ए. शिशक</li><li><b>(D)</b> यतीन्द्र सिंह</li></ol></div>
+<div class="q"><p><b>11.</b> शिवरीनारायण किन नदियों के संगम पर स्थित है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> शिवनाथ, अरपा और लीलागर</li><li><b>(B)</b> महानदी, पैरी और सोंढूर</li><li><b>(C)</b> महानदी, शिवनाथ और जोंक</li><li><b>(D)</b> हसदेव, महानदी और मांड</li></ol></div>
+<div class="q"><p><b>12.</b> रायपुर के ऐतिहासिक ‘बूढ़ा तालाब’ का वर्तमान नाम क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> कंकाली तालाब</li><li><b>(B)</b> महाराजबंध तालाब</li><li><b>(C)</b> तेलीबांधा सरोवर</li><li><b>(D)</b> स्वामी विवेकानंद सरोवर</li></ol></div>
+<div class="q"><p><b>13.</b> छत्तीसगढ़ में कलचुरि वंश (रतनपुर शाखा) की स्थापना किसने की? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> रत्नदेव प्रथम</li><li><b>(B)</b> जाजल्लदेव प्रथम</li><li><b>(C)</b> कोकल्लदेव</li><li><b>(D)</b> कलिंगराज</li></ol></div>
+<div class="q"><p><b>14.</b> ऐतिहासिक ‘बत्तीसा मंदिर’ (बत्तीस स्तंभों वाला शिव मंदिर) किस स्थान पर है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> भोरमदेव</li><li><b>(B)</b> बारसूर</li><li><b>(C)</b> ताला</li><li><b>(D)</b> खरौद</li></ol></div>
+<div class="q"><p><b>15.</b> बौद्ध विहार ‘आनंद प्रभु कुटी विहार’ किस पुरातात्त्विक स्थल पर स्थित है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> सिरपुर</li><li><b>(B)</b> ताला</li><li><b>(C)</b> मल्हार</li><li><b>(D)</b> रतनपुर</li></ol></div>
+<div class="q"><p><b>16.</b> ‘जैतखाम’ (सफ़ेद ध्वज वाला स्तंभ) किस पंथ का प्रतीक है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> कबीर पंथ</li><li><b>(B)</b> रामनामी संप्रदाय</li><li><b>(C)</b> सतनाम पंथ</li><li><b>(D)</b> नाथ पंथ</li></ol></div>
+<div class="q"><p><b>17.</b> रायपुर के समीप से बहने वाली खारून नदी किस नदी की सहायक नदी है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> महानदी</li><li><b>(B)</b> हसदेव</li><li><b>(C)</b> शिवनाथ</li><li><b>(D)</b> इंद्रावती</li></ol></div>
+<div class="q"><p><b>18.</b> तांदुला जलाशय छत्तीसगढ़ के किस जिले में स्थित है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> राजनांदगाँव</li><li><b>(B)</b> बालोद</li><li><b>(C)</b> कांकेर</li><li><b>(D)</b> बेमेतरा</li></ol></div>
+<div class="q"><p><b>19.</b> कोडार जलाशय छत्तीसगढ़ के किस जिले में स्थित है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> धमतरी</li><li><b>(B)</b> गरियाबंद</li><li><b>(C)</b> महासमुंद</li><li><b>(D)</b> बलौदाबाजार-भाटापारा</li></ol></div>
+<div class="q"><p><b>20.</b> विशेष पिछड़ी जनजाति ‘कमार’ मुख्य रूप से किस जिले में निवास करती है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> गरियाबंद</li><li><b>(B)</b> जशपुर</li><li><b>(C)</b> कबीरधाम</li><li><b>(D)</b> सुकमा</li></ol></div>
+<div class="q"><p><b>21.</b> छत्तीसगढ़ में ‘बांस गीत’ मुख्य रूप से किस समुदाय द्वारा गाया जाता है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> राउत (यादव)</li><li><b>(B)</b> गोंड</li><li><b>(C)</b> सतनामी</li><li><b>(D)</b> बैगा</li></ol></div>
+<div class="q"><p><b>22.</b> छत्तीसगढ़ की लोकगाथा ‘चंदैनी’ किसकी प्रेमकथा पर आधारित है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> ढोला-मारू</li><li><b>(B)</b> नल-दमयंती</li><li><b>(C)</b> हीर-राँझा</li><li><b>(D)</b> लोरिक-चंदा</li></ol></div>
+<div class="q"><p><b>23.</b> छत्तीसगढ़ स्टेट पावर जनरेशन कंपनी का ‘कोरबा पश्चिम’ ताप विद्युत गृह किस नाम से जाना जाता है? <span class="d">[कठिन]</span></p><ol class="two"><li><b>(A)</b> सीपत ताप विद्युत गृह</li><li><b>(B)</b> मड़वा ताप विद्युत गृह</li><li><b>(C)</b> डॉ. श्यामा प्रसाद मुखर्जी ताप विद्युत गृह</li><li><b>(D)</b> हसदेव ताप विद्युत गृह</li></ol></div>
+<div class="q"><p><b>24.</b> छत्तीसगढ़ विधानसभा की 90 सीटों में से कितनी सीटें अनुसूचित जनजाति (ST) के लिए आरक्षित हैं? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 10</li><li><b>(B)</b> 25</li><li><b>(C)</b> 29</li><li><b>(D)</b> 34</li></ol></div>
+<div class="q"><p><b>25.</b> रायपुर के प्रसिद्ध ‘दूधाधारी मठ’ की स्थापना किसने की? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> महंत घासीदास</li><li><b>(B)</b> महंत बलभद्र दास</li><li><b>(C)</b> स्वामी आत्मानंद</li><li><b>(D)</b> महंत लक्ष्मीनारायण दास</li></ol></div>
+<h2 class="sec"><span>खंड B</span>कम्प्यूटर की सामान्य जानकारी <small>(15 अंक)</small></h2>
+<div class="q"><p><b>26.</b> इंकजेट प्रिंटर कागज़ पर छपाई किस प्रकार करता है? <span class="d">[सरल]</span></p><ol class="two"><li><b>(A)</b> पिनों से रिबन पर प्रहार करके</li><li><b>(B)</b> पाउडर टोनर को गर्म करके</li><li><b>(C)</b> तरल स्याही की सूक्ष्म बूँदें छिड़ककर</li><li><b>(D)</b> ऊष्मा-संवेदी कागज़ को गर्म करके</li></ol></div>
+<div class="q"><p><b>27.</b> MS-DOS में किसी फ़ाइल की प्रतिलिपि बनाने के लिए किस कमांड का प्रयोग होता है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> MOVE</li><li><b>(B)</b> DUP</li><li><b>(C)</b> XCOPY32</li><li><b>(D)</b> COPY</li></ol></div>
+<div class="q"><p><b>28.</b> MS Word में वर्तनी और व्याकरण (Spelling &amp; Grammar) जाँचने के लिए कौन-सी फ़ंक्शन कुंजी दबाई जाती है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> F5</li><li><b>(B)</b> F7</li><li><b>(C)</b> F9</li><li><b>(D)</b> F11</li></ol></div>
+<div class="q"><p><b>29.</b> यदि Excel की सेल A1, A2, A3 में क्रमशः 2, 4, 6 हों, तो =SUM(A1:A3) का परिणाम क्या होगा? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 6</li><li><b>(B)</b> 8</li><li><b>(C)</b> 12</li><li><b>(D)</b> 246</li></ol></div>
+<div class="q"><p><b>30.</b> PowerPoint 2007 और बाद के संस्करणों में प्रस्तुति फ़ाइल का डिफ़ॉल्ट एक्सटेंशन क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> .pptx</li><li><b>(B)</b> .ppt</li><li><b>(C)</b> .pps</li><li><b>(D)</b> .pdf</li></ol></div>
+<div class="q"><p><b>31.</b> ई-मेल में ‘Attachment’ से क्या तात्पर्य है? <span class="d">[सरल]</span></p><ol class="two"><li><b>(A)</b> संदेश के साथ जोड़ी गई फ़ाइल</li><li><b>(B)</b> ई-मेल का विषय</li><li><b>(C)</b> प्राप्तकर्ता का पता</li><li><b>(D)</b> स्पैम फ़ोल्डर</li></ol></div>
+<div class="q"><p><b>32.</b> वेब ब्राउज़र में ‘History’ में क्या दिखाई देता है? <span class="d">[सरल]</span></p><ol class="two"><li><b>(A)</b> ई-मेल के ड्राफ़्ट</li><li><b>(B)</b> डाउनलोड किए गए प्रोग्राम का कोड</li><li><b>(C)</b> कंप्यूटर की हार्डवेयर जानकारी</li><li><b>(D)</b> पहले देखे गए वेब पेजों की सूची</li></ol></div>
+<div class="q"><p><b>33.</b> पेन ड्राइव (USB ड्राइव) में किस प्रकार की मेमोरी का उपयोग होता है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> कैश मेमोरी</li><li><b>(B)</b> फ़्लैश मेमोरी</li><li><b>(C)</b> चुंबकीय टेप</li><li><b>(D)</b> ऑप्टिकल डिस्क</li></ol></div>
+<div class="q"><p><b>34.</b> MS Excel में =POWER(2,5) सूत्र का परिणाम क्या होगा? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 10</li><li><b>(B)</b> 25</li><li><b>(C)</b> 32</li><li><b>(D)</b> 64</li></ol></div>
+<div class="q"><p><b>35.</b> निम्नलिखित में से कौन-सी MS-DOS की बाह्य (External) कमांड है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> FORMAT</li><li><b>(B)</b> COPY</li><li><b>(C)</b> CLS</li><li><b>(D)</b> DIR</li></ol></div>
+<div class="q"><p><b>36.</b> MS Word में Ctrl+K शॉर्टकट का उपयोग किसके लिए होता है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> टेक्स्ट को इटैलिक करने</li><li><b>(B)</b> हाइपरलिंक डालने</li><li><b>(C)</b> पृष्ठ क्रमांक डालने</li><li><b>(D)</b> टेबल बनाने</li></ol></div>
+<div class="q"><p><b>37.</b> MS Excel में ‘Freeze Panes’ विकल्प किस टैब में मिलता है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> View</li><li><b>(B)</b> Insert</li><li><b>(C)</b> Data</li><li><b>(D)</b> Home</li></ol></div>
+<div class="q"><p><b>38.</b> ‘स्पाइवेयर’ (Spyware) का मुख्य कार्य क्या है? <span class="d">[कठिन]</span></p><ol class="two"><li><b>(A)</b> फ़ाइलों का बैकअप बनाना</li><li><b>(B)</b> कंप्यूटर की गति बढ़ाना</li><li><b>(C)</b> उपयोगकर्ता की जानकारी चुपके से एकत्र कर बाहर भेजना</li><li><b>(D)</b> वायरस हटाना</li></ol></div>
+<div class="q"><p><b>39.</b> कंप्यूटर चालू करने के निर्देश रखने वाला BIOS प्रोग्राम सामान्यतः किस मेमोरी में संग्रहीत रहता है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> ROM (फ़र्मवेयर चिप)</li><li><b>(B)</b> RAM</li><li><b>(C)</b> कैश मेमोरी</li><li><b>(D)</b> हार्ड डिस्क का Recycle Bin</li></ol></div>
+<div class="q"><p><b>40.</b> AI मॉडल ‘GPT’ के पूर्ण रूप में ‘T’ किस शब्द को दर्शाता है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> Transformer</li><li><b>(B)</b> Technology</li><li><b>(C)</b> Text</li><li><b>(D)</b> Training</li></ol></div>
+<h2 class="sec"><span>खंड C</span>सामान्य मानसिक योग्यता <small>(15 अंक)</small></h2>
+<div class="q"><p><b>41.</b> श्रेणी में अगली संख्या ज्ञात कीजिए: 3, 7, 15, 31, ? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 47</li><li><b>(B)</b> 55</li><li><b>(C)</b> 63</li><li><b>(D)</b> 62</li></ol></div>
+<div class="q"><p><b>42.</b> ‘कलम : लिखना :: चाकू : ?’ <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> काटना</li><li><b>(B)</b> धार</li><li><b>(C)</b> लोहा</li><li><b>(D)</b> रसोई</li></ol></div>
+<div class="q"><p><b>43.</b> विषम संख्या चुनिए: 6, 12, 18, 25, 30 <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 12</li><li><b>(B)</b> 18</li><li><b>(C)</b> 25</li><li><b>(D)</b> 30</li></ol></div>
+<div class="q"><p><b>44.</b> यदि A = 1, B = 2, C = 3, … हो, तो ‘BAD’ के अक्षरों के मानों का योग कितना होगा? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 6</li><li><b>(B)</b> 7</li><li><b>(C)</b> 8</li><li><b>(D)</b> 9</li></ol></div>
+<div class="q"><p><b>45.</b> राधा पूर्व की ओर मुख करके खड़ी है। वह बाईं ओर 90° घूमती है और फिर 180° घूम जाती है। अब उसका मुख किस दिशा में है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> दक्षिण</li><li><b>(B)</b> उत्तर</li><li><b>(C)</b> पूर्व</li><li><b>(D)</b> पश्चिम</li></ol></div>
+<div class="q"><p><b>46.</b> श्रेणी में अगला अक्षर ज्ञात कीजिए: B, F, J, N, ? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> Q</li><li><b>(B)</b> R</li><li><b>(C)</b> S</li><li><b>(D)</b> P</li></ol></div>
+<div class="q"><p><b>47.</b> पाँच मित्रों में A, B से लंबा है; B, C से लंबा है; D, A से लंबा है और E सबसे छोटा है। सबसे लंबा कौन है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> A</li><li><b>(B)</b> B</li><li><b>(C)</b> C</li><li><b>(D)</b> D</li></ol></div>
+<div class="q"><p><b>48.</b> A, B का पुत्र है। C, B की माँ है। D, C का पति है। D का A से क्या संबंध है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> पिता</li><li><b>(B)</b> चाचा</li><li><b>(C)</b> नाना</li><li><b>(D)</b> दादा</li></ol></div>
+<div class="q"><p><b>49.</b> निम्नलिखित शब्दों को शब्दकोश के क्रम में लगाइए: 1. Paper  2. Pace  3. Page  4. Pale <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 2, 3, 4, 1</li><li><b>(B)</b> 2, 4, 3, 1</li><li><b>(C)</b> 3, 2, 4, 1</li><li><b>(D)</b> 2, 3, 1, 4</li></ol></div>
+<div class="q"><p><b>50.</b> श्रेणी में अगली संख्या ज्ञात कीजिए: 4, 9, 25, 49, 121, ? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 144</li><li><b>(B)</b> 169</li><li><b>(C)</b> 196</li><li><b>(D)</b> 225</li></ol></div>
+<div class="q"><p><b>51.</b> यदि किसी कूट भाषा में RAIPUR को RUPIAR लिखा जाता है, तो BHILAI को क्या लिखा जाएगा? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> IALHIB</li><li><b>(B)</b> IALIHB</li><li><b>(C)</b> BIALIH</li><li><b>(D)</b> IAHLIB</li></ol></div>
+<div class="q"><p><b>52.</b> पाँच व्यक्ति A, B, C, D, E एक पंक्ति में उत्तर की ओर मुख करके बैठे हैं। C बीच में है, A ठीक C के बाएँ है और E ठीक B के दाएँ है। पंक्ति के बाएँ छोर पर कौन है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> A</li><li><b>(B)</b> B</li><li><b>(C)</b> E</li><li><b>(D)</b> D</li></ol></div>
+<div class="q"><p><b>53.</b> एक बैठक में 6 व्यक्ति हैं। यदि प्रत्येक व्यक्ति शेष सभी से ठीक एक-एक बार हाथ मिलाए, तो कुल कितनी बार हाथ मिलाए जाएँगे? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 12</li><li><b>(B)</b> 15</li><li><b>(C)</b> 30</li><li><b>(D)</b> 36</li></ol></div>
+<div class="q"><p><b>54.</b> यदि 3 # 2 = 11 और 4 # 5 = 29 हो, तो 6 # 3 = ? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 18</li><li><b>(B)</b> 24</li><li><b>(C)</b> 27</li><li><b>(D)</b> 30</li></ol></div>
+<div class="q"><p><b>55.</b> एक व्यक्ति 10 m पूर्व चलता है और फिर बाएँ मुड़कर 24 m चलता है। अब वह आरंभिक बिंदु से कितनी सीधी दूरी पर है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 14 m</li><li><b>(B)</b> 26 m</li><li><b>(C)</b> 34 m</li><li><b>(D)</b> 30 m</li></ol></div>
+<h2 class="sec"><span>खंड D</span>सामान्य गणित <small>(15 अंक)</small></h2>
+<div class="q"><p><b>56.</b> 240 का 15% कितना है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 24</li><li><b>(B)</b> 32</li><li><b>(C)</b> 36</li><li><b>(D)</b> 40</li></ol></div>
+<div class="q"><p><b>57.</b> ₹6,000 पर 5% वार्षिक साधारण ब्याज की दर से कितने वर्ष में ₹900 ब्याज प्राप्त होगा? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 2 वर्ष</li><li><b>(B)</b> 3 वर्ष</li><li><b>(C)</b> 4 वर्ष</li><li><b>(D)</b> 5 वर्ष</li></ol></div>
+<div class="q"><p><b>58.</b> किसी संख्या के 5 गुने में से 7 घटाने पर 38 प्राप्त होता है। वह संख्या क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 7</li><li><b>(B)</b> 8</li><li><b>(C)</b> 9</li><li><b>(D)</b> 11</li></ol></div>
+<div class="q"><p><b>59.</b> 12 और 18 का लघुत्तम समापवर्त्य (LCM) क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 6</li><li><b>(B)</b> 24</li><li><b>(C)</b> 36</li><li><b>(D)</b> 72</li></ol></div>
+<div class="q"><p><b>60.</b> ₹900 को 4 : 5 के अनुपात में बाँटने पर छोटा भाग कितना होगा? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> ₹360</li><li><b>(B)</b> ₹400</li><li><b>(C)</b> ₹450</li><li><b>(D)</b> ₹500</li></ol></div>
+<div class="q"><p><b>61.</b> किसी वस्तु का अंकित मूल्य ₹800 है। उस पर 15% छूट देने पर विक्रय मूल्य कितना होगा? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> ₹640</li><li><b>(B)</b> ₹680</li><li><b>(C)</b> ₹700</li><li><b>(D)</b> ₹720</li></ol></div>
+<div class="q"><p><b>62.</b> 54 km/h की चाल m/s में कितनी होगी? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 12 m/s</li><li><b>(B)</b> 15 m/s</li><li><b>(C)</b> 18 m/s</li><li><b>(D)</b> 20 m/s</li></ol></div>
+<div class="q"><p><b>63.</b> 2025 का वर्गमूल क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> 35</li><li><b>(B)</b> 45</li><li><b>(C)</b> 55</li><li><b>(D)</b> 65</li></ol></div>
+<div class="q"><p><b>64.</b> ₹8,000 पर 10% वार्षिक ब्याज की दर से 1 वर्ष का चक्रवृद्धि ब्याज कितना होगा, यदि ब्याज अर्धवार्षिक रूप से संयोजित होता है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> ₹800</li><li><b>(B)</b> ₹810</li><li><b>(C)</b> ₹820</li><li><b>(D)</b> ₹840</li></ol></div>
+<div class="q"><p><b>65.</b> 100 m और 150 m लंबी दो रेलगाड़ियाँ एक ही दिशा में क्रमशः 60 km/h और 42 km/h की चाल से चल रही हैं। तेज़ गाड़ी धीमी गाड़ी को कितने समय में पूरी तरह पार करेगी? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 30 सेकंड</li><li><b>(B)</b> 45 सेकंड</li><li><b>(C)</b> 50 सेकंड</li><li><b>(D)</b> 60 सेकंड</li></ol></div>
+<div class="q"><p><b>66.</b> A और B मिलकर एक कार्य 10 दिन में करते हैं, जबकि A अकेला उसे 15 दिन में करता है। B अकेला उस कार्य को कितने दिन में करेगा? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 20 दिन</li><li><b>(B)</b> 25 दिन</li><li><b>(C)</b> 30 दिन</li><li><b>(D)</b> 35 दिन</li></ol></div>
+<div class="q"><p><b>67.</b> दो भाइयों की आयु का योग 40 वर्ष और अंतर 6 वर्ष है। बड़े भाई की आयु कितनी है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 17 वर्ष</li><li><b>(B)</b> 20 वर्ष</li><li><b>(C)</b> 23 वर्ष</li><li><b>(D)</b> 26 वर्ष</li></ol></div>
+<div class="q"><p><b>68.</b> किसी संख्या का 3/4 भाग 60 है। उसी संख्या का 2/5 भाग कितना होगा? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 24</li><li><b>(B)</b> 30</li><li><b>(C)</b> 32</li><li><b>(D)</b> 48</li></ol></div>
+<div class="q"><p><b>69.</b> 60 लीटर मिश्रण में दूध और पानी का अनुपात 2 : 1 है। इसमें 15 लीटर दूध और मिलाने पर नया अनुपात क्या होगा? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 3 : 1</li><li><b>(B)</b> 11 : 4</li><li><b>(C)</b> 5 : 2</li><li><b>(D)</b> 11 : 5</li></ol></div>
+<div class="q"><p><b>70.</b> दो नल किसी टंकी को अलग-अलग क्रमशः 12 मिनट और 15 मिनट में भर सकते हैं। दोनों को एक साथ खोलने पर खाली टंकी कितने समय में भरेगी? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 6 मिनट 20 सेकंड</li><li><b>(B)</b> 6 मिनट 40 सेकंड</li><li><b>(C)</b> 7 मिनट</li><li><b>(D)</b> 13.5 मिनट</li></ol></div>
+<h2 class="sec"><span>खंड E</span>सामान्य हिन्दी <small>(20 अंक)</small></h2>
+<div class="q"><p><b>71.</b> ‘वायु’ का पर्यायवाची शब्द कौन-सा है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> सलिल</li><li><b>(B)</b> सविता</li><li><b>(C)</b> सरोज</li><li><b>(D)</b> समीर</li></ol></div>
+<div class="q"><p><b>72.</b> ‘अमृत’ का विलोम शब्द क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> पीयूष</li><li><b>(B)</b> मृत्यु</li><li><b>(C)</b> सुधा</li><li><b>(D)</b> विष</li></ol></div>
+<div class="q"><p><b>73.</b> ‘घोड़ा’ शब्द का स्त्रीलिंग रूप क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> घोड़िन</li><li><b>(B)</b> घोड़ी</li><li><b>(C)</b> घुड़िया</li><li><b>(D)</b> घोड़ानी</li></ol></div>
+<div class="q"><p><b>74.</b> ‘गुड़िया’ शब्द का बहुवचन रूप क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> गुड़ियाँ</li><li><b>(B)</b> गुड़ियाएँ</li><li><b>(C)</b> गुड़ियों</li><li><b>(D)</b> गुड़िये</li></ol></div>
+<div class="q"><p><b>75.</b> ‘आँख का तारा होना’ मुहावरे का अर्थ क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> दूर तक देखना</li><li><b>(B)</b> आँख में चोट लगना</li><li><b>(C)</b> घमंडी होना</li><li><b>(D)</b> बहुत प्यारा होना</li></ol></div>
+<div class="q"><p><b>76.</b> ‘जिसके पास कुछ भी न हो’ — इसके लिए एक शब्द क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> अभावग्रस्त</li><li><b>(B)</b> अपरिग्रही</li><li><b>(C)</b> निर्धन</li><li><b>(D)</b> अकिंचन</li></ol></div>
+<div class="q"><p><b>77.</b> ‘महेश’ का सही संधि-विच्छेद क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> मह + ईश</li><li><b>(B)</b> महा + ईश</li><li><b>(C)</b> महा + इश</li><li><b>(D)</b> मही + ईश</li></ol></div>
+<div class="q"><p><b>78.</b> ‘गंगाजल’ में कौन-सा समास है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> द्वंद्व</li><li><b>(B)</b> अव्ययीभाव</li><li><b>(C)</b> बहुव्रीहि</li><li><b>(D)</b> तत्पुरुष</li></ol></div>
+<div class="q"><p><b>79.</b> ‘बूढ़ा’ शब्द की भाववाचक संज्ञा क्या है? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> बुढ़िया</li><li><b>(B)</b> बूढ़ापन</li><li><b>(C)</b> बुढ़ापा</li><li><b>(D)</b> वृद्ध</li></ol></div>
+<div class="q"><p><b>80.</b> शुद्ध वर्तनी वाला शब्द चुनिए। <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> उज्वल</li><li><b>(B)</b> उज्जवल</li><li><b>(C)</b> उजज्वल</li><li><b>(D)</b> उज्ज्वल</li></ol></div>
+<div class="q"><p><b>81.</b> ‘एकैक’ शब्द में कौन-सी संधि है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> गुण</li><li><b>(B)</b> वृद्धि</li><li><b>(C)</b> दीर्घ</li><li><b>(D)</b> यण</li></ol></div>
+<div class="q"><p><b>82.</b> ‘जगन्नाथ’ का सही संधि-विच्छेद क्या है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> जगत + नाथ</li><li><b>(B)</b> जगत् + नाथ</li><li><b>(C)</b> जगन् + नाथ</li><li><b>(D)</b> जग + नाथ</li></ol></div>
+<div class="q"><p><b>83.</b> ‘चक्रपाणि’ (विष्णु के अर्थ में) में कौन-सा समास है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> बहुव्रीहि</li><li><b>(B)</b> तत्पुरुष</li><li><b>(C)</b> कर्मधारय</li><li><b>(D)</b> द्विगु</li></ol></div>
+<div class="q"><p><b>84.</b> करुण रस का स्थायी भाव क्या है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> क्रोध</li><li><b>(B)</b> शोक</li><li><b>(C)</b> निर्वेद</li><li><b>(D)</b> जुगुप्सा</li></ol></div>
+<div class="q"><p><b>85.</b> ‘तरनि-तनूजा तट तमाल तरुवर बहु छाए’ — इस पंक्ति में कौन-सा अलंकार है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> अनुप्रास</li><li><b>(B)</b> यमक</li><li><b>(C)</b> श्लेष</li><li><b>(D)</b> उपमा</li></ol></div>
+<div class="q"><p><b>86.</b> ‘प्रत्युपकार’ शब्द में कौन-से उपसर्ग हैं? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> प्रति और उप</li><li><b>(B)</b> प्र और उप</li><li><b>(C)</b> प्रत्य और कार</li><li><b>(D)</b> प्रति और उत्</li></ol></div>
+<div class="q"><p><b>87.</b> ‘राम ने रावण को बाण से मारा।’ — इस वाक्य में ‘बाण से’ में कौन-सा कारक है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> कर्ता</li><li><b>(B)</b> करण</li><li><b>(C)</b> कर्म</li><li><b>(D)</b> अपादान</li></ol></div>
+<div class="q"><p><b>88.</b> ‘जो सबको समान दृष्टि से देखता हो’ — इसके लिए एक शब्द क्या है? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> समदर्शी</li><li><b>(B)</b> दूरदर्शी</li><li><b>(C)</b> सर्वज्ञ</li><li><b>(D)</b> निष्पक्षी</li></ol></div>
+<div class="q"><p><b>89.</b> ‘दूर के ढोल सुहावने’ लोकोक्ति का अर्थ क्या है? <span class="d">[कठिन]</span></p><ol class="two"><li><b>(A)</b> दूर रहने वाले संबंधी अच्छे होते हैं</li><li><b>(B)</b> ढोल की आवाज़ दूर तक जाती है</li><li><b>(C)</b> संगीत सबको प्रिय होता है</li><li><b>(D)</b> दूर की वस्तुएँ अच्छी लगती हैं, पास जाने पर वास्तविकता पता चलती है</li></ol></div>
+<div class="q"><p><b>90.</b> रोला छंद के प्रत्येक चरण में कुल कितनी मात्राएँ होती हैं? <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> 16</li><li><b>(B)</b> 22</li><li><b>(C)</b> 24</li><li><b>(D)</b> 28</li></ol></div>
+<h2 class="sec"><span>खंड F</span>सामान्य अंग्रेजी <small>(10 अंक)</small></h2>
+<div class="q"><p><b>91.</b> Choose the synonym of ‘Honest’. <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> Lazy</li><li><b>(B)</b> Clever</li><li><b>(C)</b> Rude</li><li><b>(D)</b> Truthful</li></ol></div>
+<div class="q"><p><b>92.</b> Choose the antonym of ‘Expand’. <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> Enlarge</li><li><b>(B)</b> Extend</li><li><b>(C)</b> Spread</li><li><b>(D)</b> Contract</li></ol></div>
+<div class="q"><p><b>93.</b> Choose the correct plural of ‘ox’. <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> oxen</li><li><b>(B)</b> oxes</li><li><b>(C)</b> oxs</li><li><b>(D)</b> oxi</li></ol></div>
+<div class="q"><p><b>94.</b> Fill in the blank with the correct preposition: He is fond ___ music. <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> in</li><li><b>(B)</b> of</li><li><b>(C)</b> with</li><li><b>(D)</b> for</li></ol></div>
+<div class="q"><p><b>95.</b> What is the past participle (V3) of ‘eat’? <span class="d">[सरल]</span></p><ol class="four"><li><b>(A)</b> eaten</li><li><b>(B)</b> ate</li><li><b>(C)</b> eated</li><li><b>(D)</b> eating</li></ol></div>
+<div class="q"><p><b>96.</b> Change into Passive Voice: The police caught the thief. <span class="d">[कठिन]</span></p><ol class="two"><li><b>(A)</b> The thief was caught by the police.</li><li><b>(B)</b> The thief is caught by the police.</li><li><b>(C)</b> The thief had been caught by the police.</li><li><b>(D)</b> The thief was being caught by the police.</li></ol></div>
+<div class="q"><p><b>97.</b> Choose the correct Indirect Speech: She said to me, “Where do you live?” <span class="d">[कठिन]</span></p><ol class="two"><li><b>(A)</b> She asked me where do you live.</li><li><b>(B)</b> She asked me where did I live.</li><li><b>(C)</b> She said to me where I live.</li><li><b>(D)</b> She asked me where I lived.</li></ol></div>
+<div class="q"><p><b>98.</b> One-word substitution: A person who always looks on the bright side of things. <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> Optimist</li><li><b>(B)</b> Pessimist</li><li><b>(C)</b> Realist</li><li><b>(D)</b> Fatalist</li></ol></div>
+<div class="q"><p><b>99.</b> The idiom ‘to let the cat out of the bag’ means: <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> to free an animal</li><li><b>(B)</b> to reveal a secret</li><li><b>(C)</b> to waste time</li><li><b>(D)</b> to make a mistake</li></ol></div>
+<div class="q"><p><b>100.</b> Choose the correctly spelt word. <span class="d">[कठिन]</span></p><ol class="four"><li><b>(A)</b> Accommodate</li><li><b>(B)</b> Acommodate</li><li><b>(C)</b> Accomodate</li><li><b>(D)</b> Acomodate</li></ol></div>
+<section class="page"><h2 class="sec"><span>✓</span>उत्तर-कुंजी</h2><div class="grid"><div><b>1</b> – C</div><div><b>2</b> – C</div><div><b>3</b> – D</div><div><b>4</b> – D</div><div><b>5</b> – B</div><div><b>6</b> – C</div><div><b>7</b> – A</div><div><b>8</b> – D</div><div><b>9</b> – B</div><div><b>10</b> – C</div><div><b>11</b> – C</div><div><b>12</b> – D</div><div><b>13</b> – D</div><div><b>14</b> – B</div><div><b>15</b> – A</div><div><b>16</b> – C</div><div><b>17</b> – C</div><div><b>18</b> – B</div><div><b>19</b> – C</div><div><b>20</b> – A</div><div><b>21</b> – A</div><div><b>22</b> – D</div><div><b>23</b> – D</div><div><b>24</b> – C</div><div><b>25</b> – B</div><div><b>26</b> – C</div><div><b>27</b> – D</div><div><b>28</b> – B</div><div><b>29</b> – C</div><div><b>30</b> – A</div><div><b>31</b> – A</div><div><b>32</b> – D</div><div><b>33</b> – B</div><div><b>34</b> – C</div><div><b>35</b> – A</div><div><b>36</b> – B</div><div><b>37</b> – A</div><div><b>38</b> – C</div><div><b>39</b> – A</div><div><b>40</b> – A</div><div><b>41</b> – C</div><div><b>42</b> – A</div><div><b>43</b> – C</div><div><b>44</b> – B</div><div><b>45</b> – A</div><div><b>46</b> – B</div><div><b>47</b> – D</div><div><b>48</b> – D</div><div><b>49</b> – A</div><div><b>50</b> – B</div><div><b>51</b> – B</div><div><b>52</b> – D</div><div><b>53</b> – B</div><div><b>54</b> – C</div><div><b>55</b> – B</div><div><b>56</b> – C</div><div><b>57</b> – B</div><div><b>58</b> – C</div><div><b>59</b> – C</div><div><b>60</b> – B</div><div><b>61</b> – B</div><div><b>62</b> – B</div><div><b>63</b> – B</div><div><b>64</b> – C</div><div><b>65</b> – C</div><div><b>66</b> – C</div><div><b>67</b> – C</div><div><b>68</b> – C</div><div><b>69</b> – B</div><div><b>70</b> – B</div><div><b>71</b> – D</div><div><b>72</b> – D</div><div><b>73</b> – B</div><div><b>74</b> – A</div><div><b>75</b> – D</div><div><b>76</b> – D</div><div><b>77</b> – B</div><div><b>78</b> – D</div><div><b>79</b> – C</div><div><b>80</b> – D</div><div><b>81</b> – B</div><div><b>82</b> – B</div><div><b>83</b> – A</div><div><b>84</b> – B</div><div><b>85</b> – A</div><div><b>86</b> – A</div><div><b>87</b> – B</div><div><b>88</b> – A</div><div><b>89</b> – D</div><div><b>90</b> – C</div><div><b>91</b> – D</div><div><b>92</b> – D</div><div><b>93</b> – A</div><div><b>94</b> – B</div><div><b>95</b> – A</div><div><b>96</b> – A</div><div><b>97</b> – D</div><div><b>98</b> – A</div><div><b>99</b> – B</div><div><b>100</b> – A</div></div>
+<p class="d" style="text-align:center">उत्तर वितरण: A – 23 | B – 29 | C – 26 | D – 22</p>
+<h2 class="sec"><span>?</span>उत्तर सहित व्याख्या</h2><div class="ex"><h3>खंड A — छत्तीसगढ़ का सामान्य ज्ञान</h3>
+<p><b>1. (C) मुंगेली</b> — 26 सितंबर 2026 को मुख्यमंत्री ने मुंगेली जिले के मदकू द्वीप में 21 विकास कार्यों की सौगात दी।</p>
+<p><b>2. (C) 2024–30</b> — छत्तीसगढ़ की औद्योगिक विकास नीति 2024–30 के तहत ₹8.23 लाख करोड़ से अधिक के निवेश प्रस्ताव मिलने की जानकारी 19 सितंबर 2026 को दी गई।</p>
+<p><b>3. (D) कोरबा</b> — चैतुरगढ़ (लाफागढ़) किला कोरबा जिले के पाली क्षेत्र में मैकल पर्वतमाला पर स्थित है।</p>
+<p><b>4. (D) कांकेर</b> — गढ़िया पहाड़ कांकेर नगर के समीप स्थित है।</p>
+<p><b>5. (B) गरियाबंद</b> — घटारानी जलप्रपात गरियाबंद जिले में (जतमई के समीप) स्थित है।</p>
+<p><b>6. (C) जगदलपुर</b> — बस्तर संभाग का मुख्यालय जगदलपुर है।</p>
+<p><b>7. (A) रायपुर</b> — पं. रविशंकर शुक्ल विश्वविद्यालय (स्थापना 1964) रायपुर में है।</p>
+<p><b>8. (D) बिलासपुर</b> — गुरु घासीदास विश्वविद्यालय बिलासपुर में है; 2009 में इसे केंद्रीय विश्वविद्यालय का दर्जा मिला।</p>
+<p><b>9. (B) भिलाई</b> — मैत्री बाग भिलाई (दुर्ग जिला) में है, जिसे भारत-सोवियत मैत्री के प्रतीक के रूप में विकसित किया गया।</p>
+<p><b>10. (C) डब्ल्यू. ए. शिशक</b> — वर्ष 2000 में छत्तीसगढ़ उच्च न्यायालय के गठन पर न्यायमूर्ति डब्ल्यू. ए. शिशक प्रथम मुख्य न्यायाधीश बने।</p>
+<p><b>11. (C) महानदी, शिवनाथ और जोंक</b> — शिवरीनारायण (जांजगीर-चांपा) महानदी, शिवनाथ और जोंक नदियों के संगम पर स्थित है।</p>
+<p><b>12. (D) स्वामी विवेकानंद सरोवर</b> — रायपुर का बूढ़ा तालाब अब ‘स्वामी विवेकानंद सरोवर’ कहलाता है; विवेकानंद ने बाल्यकाल का कुछ समय रायपुर में बिताया था।</p>
+<p><b>13. (D) कलिंगराज</b> — लगभग 1000 ई. में कलिंगराज ने तुम्माण को केंद्र बनाकर छत्तीसगढ़ में कलचुरि शासन की नींव रखी।</p>
+<p><b>14. (B) बारसूर</b> — बत्तीसा मंदिर दंतेवाड़ा जिले के बारसूर में है, जो नागवंशी काल के मंदिरों के लिए प्रसिद्ध है।</p>
+<p><b>15. (A) सिरपुर</b> — आनंद प्रभु कुटी विहार सिरपुर में है, जिसका निर्माण भिक्षु आनंद प्रभु ने महाशिवगुप्त बालार्जुन के काल में कराया।</p>
+<p><b>16. (C) सतनाम पंथ</b> — जैतखाम सतनाम पंथ का प्रतीक है; गिरौदपुरी का जैतखाम विशेष प्रसिद्ध है।</p>
+<p><b>17. (C) शिवनाथ</b> — खारून नदी शिवनाथ की सहायक नदी है और सोमनाथ के पास उसमें मिलती है।</p>
+<p><b>18. (B) बालोद</b> — तांदुला बांध बालोद जिले में तांदुला नदी पर बना है; भिलाई इस्पात संयंत्र को भी इससे जल मिलता है।</p>
+<p><b>19. (C) महासमुंद</b> — कोडार बांध महासमुंद जिले में स्थित है।</p>
+<p><b>20. (A) गरियाबंद</b> — कमार जनजाति मुख्य रूप से गरियाबंद (तथा धमतरी) क्षेत्र में पाई जाती है।</p>
+<p><b>21. (A) राउत (यादव)</b> — बांस गीत राउत (यादव) समुदाय की गाथा-गायन परंपरा है, जिसमें बाँस के लंबे वाद्य का प्रयोग होता है।</p>
+<p><b>22. (D) लोरिक-चंदा</b> — चंदैनी गायन में लोरिक और चंदा की प्रेमगाथा गाई जाती है।</p>
+<p><b>23. (D) हसदेव ताप विद्युत गृह</b> — कोरबा पश्चिम ताप विद्युत गृह को ‘हसदेव ताप विद्युत गृह’ (HTPS) कहा जाता है।</p>
+<p><b>24. (C) 29</b> — छत्तीसगढ़ विधानसभा में 29 सीटें अनुसूचित जनजाति और 10 सीटें अनुसूचित जाति के लिए आरक्षित हैं।</p>
+<p><b>25. (B) महंत बलभद्र दास</b> — दूधाधारी मठ की स्थापना महंत बलभद्र दास ने की, जो केवल दूध का आहार लेने के कारण ‘दूधाधारी’ कहलाए।</p>
+<h3>खंड B — कम्प्यूटर की सामान्य जानकारी</h3>
+<p><b>26. (C) तरल स्याही की सूक्ष्म बूँदें छिड़ककर</b> — इंकजेट प्रिंटर नोज़ल से तरल स्याही की अत्यंत छोटी बूँदें कागज़ पर छिड़कता है।</p>
+<p><b>27. (D) COPY</b> — COPY कमांड से एक या अधिक फ़ाइलों की प्रतिलिपि बनाई जाती है।</p>
+<p><b>28. (B) F7</b> — F7 दबाने पर Spelling &amp; Grammar जाँच शुरू होती है।</p>
+<p><b>29. (C) 12</b> — SUM फ़ंक्शन दी गई श्रेणी के मान जोड़ता है: 2+4+6 = 12।</p>
+<p><b>30. (A) .pptx</b> — PowerPoint 2007 से फ़ाइलें .pptx प्रारूप में सहेजी जाती हैं।</p>
+<p><b>31. (A) संदेश के साथ जोड़ी गई फ़ाइल</b> — ई-मेल के साथ भेजी जाने वाली फ़ाइल (जैसे फ़ोटो, PDF) Attachment कहलाती है।</p>
+<p><b>32. (D) पहले देखे गए वेब पेजों की सूची</b> — ब्राउज़र History में उपयोगकर्ता द्वारा पहले खोले गए वेब पेजों का रिकॉर्ड रहता है।</p>
+<p><b>33. (B) फ़्लैश मेमोरी</b> — पेन ड्राइव में अस्थिर नहीं रहने वाली (Non-volatile) फ़्लैश मेमोरी होती है।</p>
+<p><b>34. (C) 32</b> — POWER(2,5) = 2^5 = 32।</p>
+<p><b>35. (A) FORMAT</b> — FORMAT अलग फ़ाइल (FORMAT.COM) के रूप में रहती है, इसलिए बाह्य कमांड है; DIR, COPY, CLS आंतरिक कमांड हैं।</p>
+<p><b>36. (B) हाइपरलिंक डालने</b> — Ctrl+K से Insert Hyperlink संवाद-बॉक्स खुलता है।</p>
+<p><b>37. (A) View</b> — Freeze Panes विकल्प View टैब के Window समूह में होता है; इससे स्क्रॉल करते समय पंक्ति/कॉलम स्थिर रहते हैं।</p>
+<p><b>38. (C) उपयोगकर्ता की जानकारी चुपके से एकत्र कर बाहर भेजना</b> — स्पाइवेयर बिना अनुमति उपयोगकर्ता की गतिविधियों और जानकारी पर नज़र रखकर उसे दूसरों तक भेजता है।</p>
+<p><b>39. (A) ROM (फ़र्मवेयर चिप)</b> — BIOS मदरबोर्ड की ROM/फ़्लैश फ़र्मवेयर चिप में रहता है, जिससे बिजली बंद होने पर भी नष्ट नहीं होता।</p>
+<p><b>40. (A) Transformer</b> — GPT = Generative Pre-trained Transformer।</p>
+<h3>खंड C — सामान्य मानसिक योग्यता</h3>
+<p><b>41. (C) 63</b> — प्रत्येक पद = पिछला × 2 + 1; 31 × 2 + 1 = 63।</p>
+<p><b>42. (A) काटना</b> — कलम का कार्य लिखना है, उसी प्रकार चाकू का कार्य काटना है।</p>
+<p><b>43. (C) 25</b> — 25 के अतिरिक्त सभी संख्याएँ 6 की गुणज हैं।</p>
+<p><b>44. (B) 7</b> — B + A + D = 2 + 1 + 4 = 7।</p>
+<p><b>45. (A) दक्षिण</b> — पूर्व से बाएँ 90° = उत्तर; उत्तर से 180° = दक्षिण।</p>
+<p><b>46. (B) R</b> — प्रत्येक अक्षर 4 स्थान आगे है: N (14) + 4 = R (18)।</p>
+<p><b>47. (D) D</b> — क्रम: D &gt; A &gt; B &gt; C &gt; E; अतः D सबसे लंबा है।</p>
+<p><b>48. (D) दादा</b> — D, B का पिता है और B, A का पिता/माता है; अतः D, A का दादा है (पितृ पक्ष से)।</p>
+<p><b>49. (A) 2, 3, 4, 1</b> — Pace (c) &lt; Page (g) &lt; Pale (l) &lt; Paper (p); क्रम 2, 3, 4, 1।</p>
+<p><b>50. (B) 169</b> — ये क्रमागत अभाज्य संख्याओं (2, 3, 5, 7, 11) के वर्ग हैं; अगली 13² = 169।</p>
+<p><b>51. (B) IALIHB</b> — शब्द के अक्षरों को उलटे क्रम में लिखा गया है; BHILAI उलटने पर IALIHB।</p>
+<p><b>52. (D) D</b> — स्थान 1–5 (बाएँ से): C=3, A=2; B-E साथ-साथ केवल 4-5 पर आ सकते हैं, अतः D=1 (बायाँ छोर)।</p>
+<p><b>53. (B) 15</b> — कुल = 6C2 = 6 × 5/2 = 15।</p>
+<p><b>54. (C) 27</b> — नियम a×b + a + b: 6+3+2 = 11, 20+4+5 = 29; अतः 18 + 6 + 3 = 27।</p>
+<p><b>55. (B) 26 m</b> — समकोण त्रिभुज: √(10² + 24²) = √676 = 26 m।</p>
+<h3>खंड D — सामान्य गणित</h3>
+<p><b>56. (C) 36</b> — 240 × 15/100 = 36।</p>
+<p><b>57. (B) 3 वर्ष</b> — समय = 900 × 100/(6000 × 5) = 3 वर्ष।</p>
+<p><b>58. (C) 9</b> — 5x − 7 = 38 ⇒ 5x = 45 ⇒ x = 9।</p>
+<p><b>59. (C) 36</b> — 12 = 2²×3, 18 = 2×3²; LCM = 2²×3² = 36।</p>
+<p><b>60. (B) ₹400</b> — 900 × 4/9 = ₹400 (बड़ा भाग ₹500)।</p>
+<p><b>61. (B) ₹680</b> — 800 × 85/100 = ₹680।</p>
+<p><b>62. (B) 15 m/s</b> — 54 × 5/18 = 15 m/s।</p>
+<p><b>63. (B) 45</b> — 45 × 45 = 2025।</p>
+<p><b>64. (C) ₹820</b> — अर्धवार्षिक दर 5%, 2 अवधि: 8000 × 1.05² = 8820; ब्याज = ₹820।</p>
+<p><b>65. (C) 50 सेकंड</b> — सापेक्ष चाल = 18 km/h = 5 m/s; दूरी = 250 m; समय = 50 सेकंड।</p>
+<p><b>66. (C) 30 दिन</b> — B का 1 दिन का कार्य = 1/10 − 1/15 = 1/30; अतः 30 दिन।</p>
+<p><b>67. (C) 23 वर्ष</b> — बड़ा = (40 + 6)/2 = 23 वर्ष; छोटा = 17 वर्ष।</p>
+<p><b>68. (C) 32</b> — संख्या = 60 × 4/3 = 80; 80 × 2/5 = 32।</p>
+<p><b>69. (B) 11 : 4</b> — दूध 40 + 15 = 55 L, पानी 20 L; अनुपात 55 : 20 = 11 : 4।</p>
+<p><b>70. (B) 6 मिनट 40 सेकंड</b> — 1/12 + 1/15 = 9/60 = 3/20; समय = 20/3 मिनट = 6 मिनट 40 सेकंड।</p>
+<h3>खंड E — सामान्य हिन्दी</h3>
+<p><b>71. (D) समीर</b> — समीर = वायु; सलिल = जल, सरोज = कमल, सविता = सूर्य।</p>
+<p><b>72. (D) विष</b> — अमृत का विलोम विष है; सुधा और पीयूष अमृत के पर्याय हैं।</p>
+<p><b>73. (B) घोड़ी</b> — घोड़ा का स्त्रीलिंग घोड़ी है।</p>
+<p><b>74. (A) गुड़ियाँ</b> — ‘इया’ अंत वाले स्त्रीलिंग शब्दों में अंत में चंद्रबिंदु लगता है: गुड़िया → गुड़ियाँ।</p>
+<p><b>75. (D) बहुत प्यारा होना</b> — ‘आँख का तारा’ अर्थात् अत्यंत प्रिय व्यक्ति।</p>
+<p><b>76. (D) अकिंचन</b> — जिसके पास कुछ भी न हो, उसे अकिंचन कहते हैं।</p>
+<p><b>77. (B) महा + ईश</b> — महा + ईश = महेश (आ + ई = ए, गुण संधि)।</p>
+<p><b>78. (D) तत्पुरुष</b> — गंगाजल = गंगा का जल; संबंध तत्पुरुष समास।</p>
+<p><b>79. (C) बुढ़ापा</b> — बूढ़ा से भाववाचक संज्ञा ‘बुढ़ापा’ बनती है।</p>
+<p><b>80. (D) उज्ज्वल</b> — शुद्ध रूप ‘उज्ज्वल’ है (उत् + ज्वल)।</p>
+<p><b>81. (B) वृद्धि</b> — एक + एक: अ + ए = ऐ, अतः वृद्धि संधि।</p>
+<p><b>82. (B) जगत् + नाथ</b> — जगत् + नाथ: ‘त्’ के बाद ‘न’ आने पर ‘त्’ का ‘न्’ हो जाता है (व्यंजन संधि)।</p>
+<p><b>83. (A) बहुव्रीहि</b> — चक्र है पाणि (हाथ) में जिसके — अर्थात् विष्णु; अन्य पद प्रधान होने से बहुव्रीहि।</p>
+<p><b>84. (B) शोक</b> — करुण रस का स्थायी भाव शोक है।</p>
+<p><b>85. (A) अनुप्रास</b> — ‘त’ वर्ण की बार-बार आवृत्ति के कारण अनुप्रास अलंकार है।</p>
+<p><b>86. (A) प्रति और उप</b> — प्रति + उप + कार = प्रत्युपकार; इसमें ‘प्रति’ और ‘उप’ दो उपसर्ग हैं।</p>
+<p><b>87. (B) करण</b> — जिस साधन से क्रिया होती है, वह करण कारक है; यहाँ ‘से’ साधन के अर्थ में है।</p>
+<p><b>88. (A) समदर्शी</b> — सबको समान भाव से देखने वाला समदर्शी कहलाता है।</p>
+<p><b>89. (D) दूर की वस्तुएँ अच्छी लगती हैं, पास जाने पर वास्तविकता पता चलती है</b> — दूर से हर चीज़ आकर्षक लगती है; निकट जाने पर उसकी कमियाँ दिखती हैं।</p>
+<p><b>90. (C) 24</b> — रोला सम मात्रिक छंद है; प्रत्येक चरण में 24 मात्राएँ (11 और 13 पर यति) होती हैं।</p>
+<h3>खंड F — सामान्य अंग्रेजी</h3>
+<p><b>91. (D) Truthful</b> — Honest (ईमानदार) का समानार्थी Truthful है।</p>
+<p><b>92. (D) Contract</b> — Expand (फैलना) का विलोम Contract (सिकुड़ना) है।</p>
+<p><b>93. (A) oxen</b> — ox का अनियमित बहुवचन oxen है।</p>
+<p><b>94. (B) of</b> — ‘fond of’ सही प्रयोग है।</p>
+<p><b>95. (A) eaten</b> — eat – ate – eaten; V3 रूप eaten है।</p>
+<p><b>96. (A) The thief was caught by the police.</b> — Simple past का passive: was/were + V3; अतः ‘The thief was caught by the police.’</p>
+<p><b>97. (D) She asked me where I lived.</b> — प्रश्नवाचक वाक्य में said to → asked, वाक्य-क्रम सामान्य और काल past (live → lived) होता है।</p>
+<p><b>98. (A) Optimist</b> — हर बात में अच्छा पक्ष देखने वाला Optimist (आशावादी) कहलाता है।</p>
+<p><b>99. (B) to reveal a secret</b> — इस मुहावरे का अर्थ है — कोई रहस्य उजागर कर देना।</p>
+<p><b>100. (A) Accommodate</b> — शुद्ध वर्तनी Accommodate है (दो c और दो m)।</p>
+</div>
+<p class="d">नोट: छत्तीसगढ़ समसामयिकी से जुड़े प्रश्न (24–25) अक्टूबर 2026 तक उपलब्ध जानकारी पर आधारित हैं।</p></section>
+<p class="foot">CSPDCL DEO / स्टेनोग्राफर | मॉक टेस्ट 08 | अक्टूबर 2026</p>
+</main>
+<script>
+const b=document.getElementById('tk');b.onclick=()=>{const h=document.body.classList.toggle('hide-key');b.textContent=h?'उत्तर-कुंजी दिखाएँ':'उत्तर-कुंजी छिपाएँ';};
+</script></body></html>
