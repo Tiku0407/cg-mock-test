@@ -317,6 +317,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
       </div>
       <ul class="rules">
         <li>प्रत्येक सही उत्तर पर 1 अंक।</li>
+        <li>प्रत्येक गलत उत्तर पर ¼ अंक कटेगा (अनिवार्य); छोड़े गए प्रश्न पर कोई कटौती नहीं।</li>
         <li>समय समाप्त होते ही परीक्षा अपने आप जमा हो जाएगी।</li>
         <li>कीबोर्ड: A–D या 1–4 से उत्तर, → अगला, ← पिछला।</li>
       </ul>
@@ -327,7 +328,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
     </div>
   </div>
   <div class="mstart" id="mstart"><span id="mstart-sum"></span><button class="btn primary" id="mstart-btn" type="button">शुरू करें →</button></div>
-  <p class="note">ये अभ्यास प्रश्नपत्र हैं, आधिकारिक प्रश्नपत्र नहीं। छत्तीसगढ़ समसामयिकी के प्रश्न (हर सेट के प्रश्न 24–25) अक्टूबर 2026 तक उपलब्ध जानकारी पर आधारित हैं। परीक्षा का समय और नकारात्मक अंकन अपनी आधिकारिक परीक्षा-सूचना के अनुसार चुनें। आपके परिणाम केवल इसी ब्राउज़र में सहेजे जाते हैं।</p>
+  <p class="note">ये अभ्यास प्रश्नपत्र हैं, आधिकारिक प्रश्नपत्र नहीं। छत्तीसगढ़ समसामयिकी के प्रश्न (हर सेट के प्रश्न 24–25) अक्टूबर 2026 तक उपलब्ध जानकारी पर आधारित हैं। परीक्षा का समय अपनी आधिकारिक परीक्षा-सूचना के अनुसार चुनें। सभी सेटों में प्रति गलत उत्तर ¼ अंक का नकारात्मक अंकन अनिवार्य है। आपके परिणाम केवल इसी ब्राउज़र में सहेजे जाते हैं।</p>
 </section>
 
 <!-- ================= EXAM ================= -->
@@ -477,13 +478,14 @@ const store = {
 };
 
 // ---------- setup state ----------
-const cfg = Object.assign({set:'cg:8', mode:'exam', count:100, time:120, neg:0, shuffle:false}, store.get('cspdcl-cfg') || {});
+const cfg = Object.assign({set:'cg:8', mode:'exam', count:100, time:120, neg:0.25, shuffle:false}, store.get('cspdcl-cfg') || {});
+cfg.neg = 0.25; // नकारात्मक अंकन अनिवार्य: प्रति गलत उत्तर ¼ अंक (पुरानी सहेजी सेटिंग भी बदल जाती है)
 if (typeof cfg.set==='string' && !CG_IDX[Number(cfg.set.slice(3))]) cfg.set='cg:8';
 const COUNT_OPTS = [10,25,50,100];
 const MODE_OPTS = [['practice','अभ्यास मोड'],['exam','परीक्षा मोड']];
 const MODE_HELP = {practice:'विकल्प चुनते ही सही/गलत और उत्तर की व्याख्या दिखेगी। चुना गया उत्तर बदला नहीं जा सकेगा।', exam:'उत्तर और व्याख्या परीक्षा जमा करने के बाद समीक्षा में दिखेंगे।'};
 const TIME_OPTS = [['auto','1 मिनट/प्रश्न'],[60,'60 मिनट'],[90,'90 मिनट'],[120,'120 मिनट']];
-const NEG_OPTS = [[0,'नहीं'],[0.25,'¼ अंक'],[1/3,'⅓ अंक']];
+const NEG_OPTS = [[0.25,'¼ अंक (अनिवार्य)']];
 
 function setMeta(){
   const best = store.get('cspdcl-best') || {};
