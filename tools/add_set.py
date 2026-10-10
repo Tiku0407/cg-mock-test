@@ -2,7 +2,11 @@
 """नया मॉक टेस्ट सेट वेबसाइट में जोड़ता है।
 
 उपयोग:
-  python3 tools/add_set.py 07 sets/set07.js "मिश्रित स्तर" "07 अक्टूबर 2026"
+  python3 tools/add_set.py 07 sets/set07.js "मिश्रित स्तर" "07 अक्टूबर 2026" [--server]
+
+--server : सर्वर-जाँच वाला सेट (apps-script/grader.gs)। सही उत्तर/व्याख्या वेबसाइट में नहीं जाते;
+           वे GRADER_SECRET से कूटबद्ध होकर keys/setNN.key में जाते हैं, और प्रिंट-पेपर व .md सूची
+           (जिनमें उत्तर-कुंजी है) सार्वजनिक papers/ lists/ के बजाय private/ (gitignored) में बनते हैं।
 
 - sets/setNN.js : node module (module.exports = [ {title, marks, qs:[{q,o,a,d,e}]} × 6 ])
 - index.html के DATA में सेट जोड़ता है, डिफ़ॉल्ट चयन नए सेट पर करता है,
@@ -13,7 +17,8 @@ import json, sys, subprocess, html, re, random
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-NN, src, level, date = sys.argv[1:5]
+SERVER = '--server' in sys.argv
+NN, src, level, date = [x for x in sys.argv[1:] if x != '--server'][:4]
 no = int(NN)
 L = "ABCD"; kh = "ABCDEF"; e = html.escape
 DI = {'सरल': 0, 'मध्यम': 1, 'कठिन': 2}
@@ -55,9 +60,21 @@ prev = max(st['no'] for st in A['cg']['sets'])
 cq = []
 for i, s in enumerate(raw):
     for x in s['qs']:
-        A['q'].append([i+1, DI[x['d']], x['q'], x['o'], x['a'], x['e']])
-        cq.append([DI[x['d']], x['q'], x['o'], x['a'], x['e']])
-A['cg']['sets'].append({'no': no, 'label': f'मॉक टेस्ट {NN} — पूर्ण प्रश्नपत्र ({level})', 'badge': NN, 'q': cq})
+        if SERVER:      # उत्तर/व्याख्या पेज में नहीं; विषयवार अभ्यास-पूल में भी नहीं
+            cq.append([DI[x['d']], x['q'], x['o'], -1, ''])
+        else:
+            A['q'].append([i+1, DI[x['d']], x['q'], x['o'], x['a'], x['e']])
+            cq.append([DI[x['d']], x['q'], x['o'], x['a'], x['e']])
+meta = {'no': no, 'label': f'मॉक टेस्ट {NN} — पूर्ण प्रश्नपत्र ({level})', 'badge': NN, 'q': cq}
+if SERVER:
+    from keycrypt import encrypt, secret
+    meta.update({'server': True, 'neg': 0.25, 'minutes': 120})
+    key = {'no': no, 'secs': [[nm, ln] for nm, ln in A['cg']['sections']], 'neg': 0.25, 'minutes': 120,
+           'a': [x['a'] for s in raw for x in s['qs']], 'e': [x['e'] for s in raw for x in s['qs']]}
+    assert sum(ln for _, ln in key['secs']) == len(key['a']) == 100
+    (ROOT/'keys').mkdir(exist_ok=True)
+    (ROOT/f'keys/set{NN}.key').write_text(encrypt(key, secret()) + '\n')
+A['cg']['sets'].append(meta)
 idx = save(idx, A, span)
 idx = idx.replace(f"'cg:{prev}'", f"'cg:{no}'")
 n_sets = len(A['cg']['sets'])
@@ -65,7 +82,12 @@ idx = re.sub(r'\d+ पूर्ण मॉक टेस्ट \(\d+ प्रश�
 (ROOT/'index.html').write_text(idx)
 
 # ---- printable paper (template = previous paper)
-p = (ROOT/f'papers/mock-test-{prev:02d}.html').read_text()
+import glob
+tpl_path = sorted(glob.glob(str(ROOT/'papers/mock-test-*.html')))[-1]
+tpl = int(re.search(r'mock-test-(\d+)\.html$', tpl_path).group(1))
+p = Path(tpl_path).read_text()
+OUT = ROOT/'private' if SERVER else ROOT
+(OUT/'papers').mkdir(parents=True, exist_ok=True); (OUT/'lists').mkdir(parents=True, exist_ok=True)
 secs = ""; key = []; expl = ""
 md = [f"# CSPDCL DEO / स्टेनोग्राफर — मॉक टेस्ट {NN} ({level}) | {date}", "", "| क्रमांक | प्रश्न | सही उत्तर |", "|---|---|---|"]
 for i, s in enumerate(raw):
@@ -86,15 +108,15 @@ x = p.find('<div class="ex">') + 16; y = p.find('</div>\n<p class="d">नोट'
 dist = {c: sum(1 for _, v in key if v == c) for c in L}
 p = re.sub(r'उत्तर वितरण: A – \d+ \| B – \d+ \| C – \d+ \| D – \d+',
            f'उत्तर वितरण: A – {dist["A"]} | B – {dist["B"]} | C – {dist["C"]} | D – {dist["D"]}', p)
-p = p.replace(f'मॉक टेस्ट {prev:02d}', f'मॉक टेस्ट {NN}')
+p = p.replace(f'मॉक टेस्ट {tpl:02d}', f'मॉक टेस्ट {NN}')
 p = re.sub(r'CSPDCL मॉक टेस्ट 01–\d\d', f'CSPDCL मॉक टेस्ट 01–{prev:02d}', p)
 p = re.sub(r'100 नए बहुविकल्पीय प्रश्न( \| [^<|]*)?(?=<)', f'100 नए बहुविकल्पीय प्रश्न | {level}', p, count=1)
 sys.path.insert(0, str(ROOT/'tools')); from fracfmt import frac_html
-(ROOT/f'papers/mock-test-{NN}.html').write_text(frac_html(p))
+(OUT/f'papers/mock-test-{NN}.html').write_text(frac_html(p))
 md += ["", f"उत्तर वितरण: A {dist['A']} | B {dist['B']} | C {dist['C']} | D {dist['D']}"]
 from fracfmt import frac_text
-(ROOT/f'lists/mock-test-{NN}.md').write_text(frac_text("\n".join(md) + "\n"))
+(OUT/f'lists/mock-test-{NN}.md').write_text(frac_text("\n".join(md) + "\n"))
 dif = {}
 for s in raw:
     for q in s['qs']: dif[q['d']] = dif.get(q['d'], 0) + 1
-print('जोड़ा:', NN, 'उत्तर-वितरण', dist, 'कठिनाई', dif, 'कुल प्रश्न', len(A['q']))
+print('जोड़ा:', NN, '(सर्वर-जाँच)' if SERVER else '', 'उत्तर-वितरण', dist, 'कठिनाई', dif, 'कुल प्रश्न', len(A['q']))

@@ -23,7 +23,7 @@ pdf = (C/'daily_sets_01_05.txt').read_text()
 d06 = json.loads((C/'daily_set_06.json').read_text())
 sys.path.insert(0, str(ROOT/'tools')); from datacodec import load
 A, _ = load((ROOT/'index.html').read_text())
-old = [(f"CSPDCL-{s['badge']}#{i}", q[1], q[2][q[3]]) for s in A['cg']['sets'] for i, q in enumerate(s['q'], 1)]
+old = [(f"CSPDCL-{s['badge']}#{i}", q[1], (q[2][q[3]] if q[3] >= 0 else '')) for s in A['cg']['sets'] for i, q in enumerate(s['q'], 1)]
 old += [(f"दैनिक-06#{i}", q['q'], q['o'][q['a']]) for i, q in enumerate(d06, 1)]
 P = []
 for bl in re.split(r'(?:\n|\s)(?=\d{1,3}\.\s)', pdf):

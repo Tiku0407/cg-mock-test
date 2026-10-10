@@ -434,6 +434,14 @@ body.exam-lock #exam{-webkit-user-select:none;user-select:none;-webkit-touch-cal
   </div>
 </div>
 
+<div class="overlay" id="srv-modal" hidden>
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="srv-t">
+    <h3 id="srv-t">कृपया प्रतीक्षा करें</h3>
+    <p id="srv-p"></p>
+    <div class="row"><button class="btn" id="srv-home" type="button" hidden>मुख्य पृष्ठ</button><button class="btn primary" id="srv-retry" type="button" hidden>फिर से जमा करें</button></div>
+  </div>
+</div>
+
 <div class="overlay" id="confirm" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cf-t">
     <h3 id="cf-t">परीक्षा जमा करें?</h3>
@@ -497,6 +505,16 @@ const store = {
 };
 
 // ---------- setup state ----------
+// ---------- सर्वर-जाँच वाले सेट (उत्तर-कुंजी पेज में नहीं; apps-script/grader.gs) ----------
+const isSrv = c => isCG(c) && !!(CG_META[cgNo(c)]||{}).server;
+function applyKey(no, a, e){ (CG_IDX[no]||[]).forEach((qi,k)=>{ DATA.q[qi][4] = a[k]; DATA.q[qi][5] = (e && e[k]) || ''; }); CG_META[no].keyed = true; }
+for (const st of CG.sets) if (st.server){ const k = store.get('cspdcl-key-'+st.no); if (k && Array.isArray(k.a)) applyKey(st.no, k.a, k.e); }
+function when(ms){ return new Date(ms).toLocaleString('hi-IN', {day:'numeric', month:'long', hour:'numeric', minute:'2-digit'}); }
+async function api(action, payload){
+  const r = await fetch(SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({action, ...payload})});
+  if (!r.ok) throw new Error('http '+r.status);
+  return await r.json();
+}
 const cfg = Object.assign({set:'cg:10', mode:'exam', count:100, time:120, neg:0.25, shuffle:false}, store.get('cspdcl-cfg') || {});
 cfg.neg = 0.25; // नकारात्मक अंकन अनिवार्य: प्रति गलत उत्तर ¼ अंक (पुरानी सहेजी सेटिंग भी बदल जाती है)
 if (typeof cfg.set==='string' && !CG_IDX[Number(cfg.set.slice(3))]) cfg.set='cg:10';
@@ -691,6 +709,7 @@ function askSubmit(){
 function finish(){
   clearInterval(tick); $('confirm').hidden = true;
   if (!T) return;
+  if (T.srv && !T.srvRes) return submitServer();
   const R = { ...T, submitted: Date.now() };
   store.del('cspdcl-active');
   $('ac-modal').hidden = true; document.body.classList.remove('exam-lock');
@@ -709,6 +728,9 @@ function renderResult(R){
     if (q[1]>=0) byD[q[1]][1]++; (byS[sk] ||= [0,0])[1]++;
     if (a===null) skip++; else if (a===q[4]) { ok++; if (q[1]>=0) byD[q[1]][0]++; byS[sk][0]++; } else bad++;
   });
+  const noKey = !!(R.srv && !(CG_META[R.srv.set]||{}).keyed);
+  if (noKey){ const S = R.srvRes; ok = S.correct; bad = S.wrong; skip = S.skipped; byD.forEach(d=>{ d[0]=0; d[1]=0; }); S.sections.forEach((x,k)=>{ byS[k] = [x[1], x[2]]; }); }
+  R.noKey = noKey;
   const n=R.idx.length, neg=R.cfg.neg||0;
   const score = Math.round((ok - bad*neg)*100)/100;
   const pct = Math.max(0, Math.round(score/n*100));
@@ -719,6 +741,7 @@ function renderResult(R){
   $('r-eyebrow').textContent = `परिणाम · ${R.name}`;
   $('r-title').textContent = pct>=75 ? 'बहुत अच्छा प्रदर्शन' : pct>=50 ? 'अच्छा प्रयास, और अभ्यास करें' : 'कमज़ोर विषयों को दोबारा पढ़ें';
   $('r-line').textContent = `${pct}% अंक · सटीकता ${acc}% · लगा समय ${fmt(used)}` + (neg?` · नकारात्मक अंकन ${neg===0.25?'¼':'⅓'}`:'')
+    + (R.srvRes && R.srvRes.late ? ' · समय-सीमा के बाद जमा' : '')
     + (R.cfg.mode==='exam' && R.viol ? ` · चेतावनियाँ (टैब/ऐप/फ़ुलस्क्रीन छोड़ना): ${R.viol}` : '') + (R.autoSub ? ' · 3 चेतावनियों के बाद अपने-आप जमा' : '');
   $('stats').innerHTML = [
     ['ok',ok,'सही'],['bad',bad,'गलत'],['skip',skip,'छोड़े गए'],['',acc+'%','सटीकता (हल किए गए में)'],['',fmt(used),'लगा समय']
@@ -733,23 +756,26 @@ function renderResult(R){
     const best = store.get('cspdcl-best') || {}; if (n>=25 && (best[R.cfg.set]==null || pct>best[R.cfg.set])) { best[R.cfg.set]=pct; store.set('cspdcl-best', best); }
     R.saved = true;
     if (R.cfg.mode==='exam') markAttempt(R.cfg, {score, total:n, pct, at:R.submitted, done:true});
-    sendToSheet(R, {score, n, pct, ok, bad, skip, used, byS});
+    if (R.srv) R.sheet = 'ok'; else sendToSheet(R, {score, n, pct, ok, bad, skip, used, byS});
   }
   lastCard = {R, score, n, pct, ok, bad, skip, acc, used, secs: Object.keys(byS).sort((a,b)=>a-b).map(s=>[R.sections ? R.sections[s].short : DATA.short[s], byS[s][0], byS[s][1]])};
   showSheetStatus(R);
   $('retry').textContent = R.cfg.mode==='exam' ? 'अभ्यास मोड में दोबारा हल करें' : 'यही टेस्ट दोबारा दें';
+  $('retry').hidden = noKey;
   filter='all'; renderFilters(); renderReview();
 }
 function bar(label, a, t){ const p=Math.round(a/t*100); return `<div class="bar"><span>${label}</span><span class="track"><i style="width:${p}%"></i></span><span class="v num">${a}/${t}</span></div>`; }
 function fmt(s){ const m=Math.floor(s/60), r=s%60; return `${m} मि ${String(r).padStart(2,'0')} से`; }
 function renderFilters(){
-  const R=lastResult; const cnt={all:R.idx.length,bad:0,skip:0,ok:0};
+  const R=lastResult;
+  if (R.noKey){ $('filters').innerHTML=''; return; } const cnt={all:R.idx.length,bad:0,skip:0,ok:0};
   R.idx.forEach((qi,i)=>{ const a=R.ans[i]; if(a===null)cnt.skip++; else if(a===DATA.q[qi][4])cnt.ok++; else cnt.bad++; });
   const F=[['all','सभी'],['bad','गलत'],['skip','छोड़े गए'],['ok','सही']];
   $('filters').innerHTML=''; for (const [k,l] of F){ const b=document.createElement('button'); b.type='button'; b.textContent=`${l} (${cnt[k]})`; b.setAttribute('aria-pressed', filter===k); b.onclick=()=>{filter=k; renderFilters(); renderReview();}; $('filters').appendChild(b); }
 }
 function renderReview(){
   const R=lastResult, list=$('rev-list'); list.innerHTML='';
+  if (R.noKey){ list.innerHTML = `<p style="color:var(--ink-3)">आपके अंक सर्वर पर जाँचकर सहेज दिए गए हैं। सही उत्तर और व्याख्या ${R.srvRes.review_at ? when(R.srvRes.review_at) + ' के बाद' : 'बाद में'} इसी सेट को “अभ्यास मोड” में खोलकर देखें।</p>`; return; }
   R.idx.forEach((qi,i)=>{
     const q=DATA.q[qi], a=R.ans[i], st = a===null?'skip':(a===q[4]?'ok':'bad');
     if (filter!=='all' && filter!==st) return;
@@ -772,6 +798,7 @@ function show(id){ for (const s of ['setup','exam','result']) $(s).hidden = s!==
 $('start').onclick = ()=> {
   $('attempt-msg').hidden = true;
   if (!validStudent()) return;
+  if (isSrv(cfg)) return startServer();
   const p = priorAttempt(cfg);
   if (p){
     $('attempt-msg').textContent = `इस मोबाइल नंबर से “${nameOf(cfg.set)}” परीक्षा मोड में पहले ही दिया जा चुका है` + (p.done ? ` (अंक: ${p.score}/${p.total})` : '') + '। परीक्षा मोड में एक सेट एक ही बार दिया जा सकता है — दोबारा अभ्यास के लिए “अभ्यास मोड” चुनें।';
@@ -809,6 +836,67 @@ $('mstart-btn').onclick = ()=> $('start').click();
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
 
 
+// ---------- सर्वर-जाँच: शुरू / जमा ----------
+let submitting = false;
+async function startServer(){
+  const no = cgNo(cfg), meta = CG_META[no], btn = $('start'), old = btn.textContent;
+  const msg = t => { $('attempt-msg').textContent = t; $('attempt-msg').hidden = false; $('attempt-msg').scrollIntoView({block:'center', behavior:'smooth'}); };
+  const exam = cfg.mode === 'exam';
+  if (exam) enterFS();                                   // उपयोगकर्ता-क्लिक के भीतर ही फ़ुलस्क्रीन माँगें
+  const leaveFS = () => { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(()=>{}); };
+  btn.disabled = true; btn.textContent = 'सर्वर से जुड़ रहे हैं…';
+  try {
+    if (!exam){
+      if (!meta.keyed){
+        const r = await api('key', {set:no, mobile:student.mob});
+        if (!r.ok){ msg(r.code==='locked' ? (r.done ? `इस सेट के उत्तर और अभ्यास मोड ${when(r.open_at)} के बाद खुलेंगे।` : `यह सेट अभ्यास मोड में ${when(r.open_at)} से खुलेगा। अभी इसे परीक्षा मोड में दें।`) : 'इस सेट की उत्तर-कुंजी अभी सर्वर पर उपलब्ध नहीं है, कुछ देर बाद प्रयास करें।'); return; }
+        store.set('cspdcl-key-'+no, {a:r.a, e:r.e}); applyKey(no, r.a, r.e);
+      }
+      startTest(buildTest()); return;
+    }
+    const r = await api('start', {set:no, mobile:student.mob, name:student.name});
+    if (!r.ok){
+      leaveFS();
+      msg(r.code==='done' ? `इस मोबाइल नंबर से “${nameOf(cfg.set)}” पहले ही दिया जा चुका है (अंक: ${r.score}/${r.total})। परीक्षा मोड में एक सेट एक ही बार दिया जा सकता है।`
+        : r.code==='bad_mobile' ? 'कृपया सही मोबाइल नंबर लिखें।' : 'यह सेट अभी सर्वर पर तैयार नहीं है, कुछ मिनट बाद प्रयास करें।');
+      return;
+    }
+    const t = buildTest();
+    t.cfg.neg = meta.neg ?? 0.25;
+    t.total = (r.minutes || meta.minutes || 120) * 60;
+    const off = r.now - Date.now();                      // सर्वर और फ़ोन की घड़ी का अंतर
+    t.started = r.start - off; t.end = t.started + t.total*1000;
+    t.srv = {token:r.token, set:no};
+    markAttempt(t.cfg, {at:Date.now(), done:false});
+    startTest(t);
+  } catch(err){ leaveFS(); msg('सर्वर से संपर्क नहीं हो सका। इंटरनेट जाँचकर फिर से प्रयास करें।'); }
+  finally { btn.disabled = false; btn.textContent = old; }
+}
+function srvModal(title, text, retry, home){
+  $('srv-modal').hidden = !title; if (!title) return;
+  $('srv-t').textContent = title; $('srv-p').textContent = text || '';
+  $('srv-retry').hidden = !retry; $('srv-home').hidden = !home;
+}
+async function submitServer(){
+  if (submitting || !T || !T.srv) return; submitting = true;
+  $('ac-modal').hidden = true; srvModal('उत्तर जमा हो रहे हैं…', 'कृपया पेज बंद न करें।');
+  const no = T.srv.set, pos = new Map((CG_IDX[no]||[]).map((qi,k)=>[qi,k]));
+  const answers = Array(pos.size).fill(null); T.idx.forEach((qi,i)=>{ if (pos.has(qi)) answers[pos.get(qi)] = T.ans[i]; });
+  let res = null, fatal = false;
+  for (let k=0; k<3 && !res && !fatal; k++){
+    try { const r = await api('submit', {token:T.srv.token, answers, violations:T.viol||0, auto:!!T.autoSub}); if (r.ok) res = r; else if (r.code==='bad_token') fatal = true; else throw new Error(r.code); }
+    catch(err){ await new Promise(z=>setTimeout(z, 1500*(k+1))); }
+  }
+  submitting = false;
+  if (fatal){ srvModal('प्रयास सर्वर पर नहीं मिला', 'यह प्रयास सर्वर पर दर्ज नहीं मिला (शिक्षक ने हटाया हो सकता है)। मुख्य पृष्ठ से फिर शुरू करें।', false, true); return; }
+  if (!res){ srvModal('उत्तर जमा नहीं हो सके', 'इंटरनेट कनेक्शन जाँचें। आपके उत्तर इस फ़ोन में सुरक्षित हैं — “फिर से जमा करें” दबाएँ।', true, false); return; }
+  if (Array.isArray(res.a)){ store.set('cspdcl-key-'+no, {a:res.a, e:res.e}); applyKey(no, res.a, res.e); }
+  T.srvRes = res; persist(); srvModal(null);
+  finish();
+}
+$('srv-retry').onclick = submitServer;
+$('srv-home').onclick = ()=>{ store.del('cspdcl-active'); T = null; srvModal(null); document.body.classList.remove('exam-lock'); show('setup'); renderSets(); renderHistory(); if (document.fullscreenElement) document.exitFullscreen().catch(()=>{}); };
+
 // ---------- परीक्षा-सुरक्षा: एक प्रयास, फ़ुलस्क्रीन, टैब-बदल निगरानी, कॉपी-रोक ----------
 const AC_MAX = 3;
 let acUnloading = false, acLast = 0;
@@ -826,7 +914,7 @@ function acChip(){
   c.textContent = `चेतावनी ${T.viol}/${AC_MAX}`;
 }
 function acViolation(kind){
-  if (!acActive() || acUnloading) return;
+  if (!acActive() || acUnloading || submitting) return;
   const now = Date.now(); if (now - acLast < 1500) return; acLast = now;
   T.viol = (T.viol||0) + 1; (T.violLog ||= []).push([kind, now]); persist(); acChip();
   if (T.viol >= AC_MAX){ T.autoSub = true; persist(); finish(); return; }
