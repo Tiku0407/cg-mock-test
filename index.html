@@ -1014,8 +1014,14 @@ $('sc-share').onclick = async ()=>{
 if (/[?&]check=server\b/.test(location.search)){          // शिक्षक हेतु: ?check=server — सर्वर-जाँच (Apps Script) का नया संस्करण चालू है या नहीं
   const box = document.createElement('div'); box.className = 'fs-bar'; box.style.cssText = 'position:fixed;left:12px;right:12px;top:12px;z-index:30;background:var(--surface)';
   box.textContent = 'सर्वर की जाँच हो रही है…'; document.body.appendChild(box);
-  api('key', {set:0, mobile:'0'}).then(r => { box.textContent = (r && r.code==='no_key') ? '✓ सर्वर-जाँच चालू है — Apps Script का नया संस्करण ठीक से Deploy हुआ है।' : '✗ अनपेक्षित उत्तर: ' + JSON.stringify(r); })
-    .catch(() => { box.textContent = '✗ सर्वर-जाँच अभी चालू नहीं है — Apps Script में Deploy → Manage deployments → Edit → New version → Deploy करें, फिर यह पेज दोबारा खोलें।'; });
+  fetch(SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({action:'key', set:0, mobile:'0'})})
+    .then(r => r.text().then(t => {
+      let j = null; try { j = JSON.parse(t); } catch(e) {}
+      if (j && j.code==='no_key') box.textContent = '✓ सर्वर-जाँच चालू है — Apps Script का नया संस्करण ठीक से Deploy हुआ है।';
+      else if (t.trim()==='ok') box.textContent = '✗ अभी पुराना संस्करण चल रहा है (उत्तर: "ok")। Apps Script में Deploy → Manage deployments → ✏ Edit → Version: New version → Deploy करें, फिर यह पेज दोबारा खोलें।';
+      else box.textContent = '✗ अनपेक्षित उत्तर (HTTP ' + r.status + '): ' + t.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').slice(0,160);
+    }))
+    .catch(err => { box.textContent = '✗ सर्वर तक अनुरोध नहीं पहुँचा या उत्तर पढ़ा नहीं जा सका (' + err + ')। Deployment में "Who has access" = "Anyone" होना चाहिए।'; });
 }
 renderSets(); seg('seg-mode', MODE_OPTS, 'mode'); seg('seg-count', COUNT_OPTS, 'count'); seg('seg-time', TIME_OPTS, 'time'); seg('seg-neg', NEG_OPTS, 'neg'); renderSummary(); renderHistory();
 const active = store.get('cspdcl-active');
