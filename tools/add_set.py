@@ -48,7 +48,8 @@ for s in raw:
 
 # ---- live page
 idx = (ROOT/'index.html').read_text()
-a = idx.find('const DATA = ') + 13; b = idx.find(';\n', a); A = json.loads(idx[a:b])
+sys.path.insert(0, str(ROOT/'tools')); from datacodec import load, save
+A, span = load(idx)
 assert all(st['no'] != no for st in A['cg']['sets']), f'सेट {NN} पहले से मौजूद है'
 prev = max(st['no'] for st in A['cg']['sets'])
 cq = []
@@ -57,7 +58,7 @@ for i, s in enumerate(raw):
         A['q'].append([i+1, DI[x['d']], x['q'], x['o'], x['a'], x['e']])
         cq.append([DI[x['d']], x['q'], x['o'], x['a'], x['e']])
 A['cg']['sets'].append({'no': no, 'label': f'मॉक टेस्ट {NN} — पूर्ण प्रश्नपत्र ({level})', 'badge': NN, 'q': cq})
-idx = idx[:a] + json.dumps(A, ensure_ascii=False) + idx[b:]
+idx = save(idx, A, span)
 idx = idx.replace(f"'cg:{prev}'", f"'cg:{no}'")
 n_sets = len(A['cg']['sets'])
 idx = re.sub(r'\d+ पूर्ण मॉक टेस्ट \(\d+ प्रश्न\)', f'{n_sets} पूर्ण मॉक टेस्ट ({100*n_sets} प्रश्न)', idx)

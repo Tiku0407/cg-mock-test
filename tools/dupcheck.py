@@ -21,8 +21,8 @@ def G(s, n=3):
 
 pdf = (C/'daily_sets_01_05.txt').read_text()
 d06 = json.loads((C/'daily_set_06.json').read_text())
-idx = (ROOT/'index.html').read_text(); a = idx.find('const DATA = ')+13; b = idx.find(';\n', a)
-A = json.loads(idx[a:b])
+sys.path.insert(0, str(ROOT/'tools')); from datacodec import load
+A, _ = load((ROOT/'index.html').read_text())
 old = [(f"CSPDCL-{s['badge']}#{i}", q[1], q[2][q[3]]) for s in A['cg']['sets'] for i, q in enumerate(s['q'], 1)]
 old += [(f"दैनिक-06#{i}", q['q'], q['o'][q['a']]) for i, q in enumerate(d06, 1)]
 P = []
