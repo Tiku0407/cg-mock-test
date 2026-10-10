@@ -1011,6 +1011,12 @@ $('sc-share').onclick = async ()=>{
 };
 
 // ---------- boot ----------
+if (/[?&]check=server\b/.test(location.search)){          // शिक्षक हेतु: ?check=server — सर्वर-जाँच (Apps Script) का नया संस्करण चालू है या नहीं
+  const box = document.createElement('div'); box.className = 'fs-bar'; box.style.cssText = 'position:fixed;left:12px;right:12px;top:12px;z-index:30;background:var(--surface)';
+  box.textContent = 'सर्वर की जाँच हो रही है…'; document.body.appendChild(box);
+  api('key', {set:0, mobile:'0'}).then(r => { box.textContent = (r && r.code==='no_key') ? '✓ सर्वर-जाँच चालू है — Apps Script का नया संस्करण ठीक से Deploy हुआ है।' : '✗ अनपेक्षित उत्तर: ' + JSON.stringify(r); })
+    .catch(() => { box.textContent = '✗ सर्वर-जाँच अभी चालू नहीं है — Apps Script में Deploy → Manage deployments → Edit → New version → Deploy करें, फिर यह पेज दोबारा खोलें।'; });
+}
 renderSets(); seg('seg-mode', MODE_OPTS, 'mode'); seg('seg-count', COUNT_OPTS, 'count'); seg('seg-time', TIME_OPTS, 'time'); seg('seg-neg', NEG_OPTS, 'neg'); renderSummary(); renderHistory();
 const active = store.get('cspdcl-active');
 if (active && active.idx && active.end > Date.now()) startTest(active);
