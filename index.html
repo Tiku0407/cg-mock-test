@@ -272,6 +272,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
 .inp{font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);width:100%}
 .inp:focus{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 .scorecard-panel{margin-bottom:16px}
+.ty-panel{margin-bottom:16px}
+#ty-img{display:block;width:100%;max-width:420px;height:auto;margin:0 auto 12px;border-radius:14px;border:1px solid var(--line)}
 .sc-actions{display:flex;gap:10px;flex-wrap:wrap}
 .btn.wa{background:#1F8F4E;border-color:#1F8F4E;color:#fff}
 .sheet-status{margin:12px 0 0;font-size:14.5px;padding:8px 12px;border-radius:8px;background:var(--surface-2);color:var(--ink-2)}
@@ -402,6 +404,14 @@ body.exam-lock #exam{-webkit-user-select:none;user-select:none;-webkit-touch-cal
     </div>
   </div>
   <div class="stats" id="stats"></div>
+  <div class="panel ty-panel" id="ty-panel" hidden>
+    <h2 style="font-size:20px;margin-bottom:10px">धन्यवाद! आज का प्रेरणा-संदेश</h2>
+    <img id="ty-img" alt="धन्यवाद कार्ड — कुल अंक और आज का प्रेरणा-संदेश">
+    <div class="sc-actions">
+      <button class="btn primary" id="ty-download" type="button">⬇ धन्यवाद कार्ड डाउनलोड करें</button>
+      <button class="btn wa" id="ty-share" type="button">WhatsApp पर भेजें</button>
+    </div>
+  </div>
   <div class="panel scorecard-panel">
     <h2 style="font-size:20px;margin-bottom:4px">अपना स्कोरकार्ड सहेजें</h2>
     <p class="sub" style="margin:0 0 12px">स्कोरकार्ड फ़ोटो की तरह आपके फ़ोन में सहेजा जाएगा, या सीधे WhatsApp पर भेजें।</p>
@@ -760,6 +770,7 @@ function renderResult(R){
   }
   lastCard = {R, score, n, pct, ok, bad, skip, acc, used, secs: Object.keys(byS).sort((a,b)=>a-b).map(s=>[R.sections ? R.sections[s].short : DATA.short[s], byS[s][0], byS[s][1]])};
   showSheetStatus(R);
+  showThanks();
   $('retry').textContent = R.cfg.mode==='exam' ? 'अभ्यास मोड में दोबारा हल करें' : 'यही टेस्ट दोबारा दें';
   $('retry').hidden = noKey;
   filter='all'; renderFilters(); renderReview();
@@ -1002,6 +1013,95 @@ async function drawCard(){
   x.fillStyle='#4A5673'; x.font=F(400,28); x.textAlign='center'; x.fillText(SITE_URL, W/2, 1310); x.textAlign='left';
   return cv;
 }
+// ---------- धन्यवाद कार्ड + रोज़ बदलने वाला प्रेरणा-संदेश ----------
+const THOUGHTS = [
+  'आप रोज़ जितना अभ्यास करेंगे, अपने भविष्य को उतना ही आसान बनाएँगे।',
+  'हर दिन का एक टेस्ट, परीक्षा के दिन का डर एक कदम कम कर देता है।',
+  'आज की मेहनत ही कल की सफलता की नींव है — रुकिए मत।',
+  'गलतियाँ हार नहीं, सीखने की सीढ़ी हैं। आज की गलती कल का सही उत्तर बनेगी।',
+  'लगातार किया गया छोटा प्रयास, कभी-कभार किए गए बड़े प्रयास से अधिक फल देता है।',
+  'सपने उन्हीं के पूरे होते हैं जो रोज़ उनके लिए थोड़ा-थोड़ा चलते हैं।',
+  'आज आपने खुद को पिछले दिन से बेहतर बनाने का एक और मौका लिया — यही असली जीत है।',
+  'अंक बढ़ाने का सबसे पक्का तरीका है — रोज़ अभ्यास और गलत उत्तरों की समीक्षा।',
+  'मंज़िल दूर लगे तो पीछे देखिए — आप कितना आगे आ चुके हैं।',
+  'अनुशासन वह पुल है जो लक्ष्य और सफलता को जोड़ता है।',
+  'जो रोज़ पढ़ता है, वह परीक्षा से नहीं, परीक्षा उससे घबराती है।',
+  'धैर्य और निरंतरता — इन दो के सामने कोई भी परीक्षा कठिन नहीं।',
+  'आज का पसीना, कल की मुस्कान बनेगा। मेहनत जारी रखिए।',
+  'हर प्रश्न जो आज आपने हल किया, वह कल आपके आत्मविश्वास को मज़बूत करेगा।',
+  'सफलता किस्मत से नहीं, रोज़ की छोटी-छोटी तैयारियों से मिलती है।',
+  'कमज़ोर विषय को आज थोड़ा समय दीजिए, कल वही आपकी ताक़त बनेगा।',
+  'हार मानने से पहले याद कीजिए कि आपने शुरुआत क्यों की थी।',
+  'आप जितना अभ्यास करेंगे, समय पर उतने ही अधिक प्रश्न हल कर पाएँगे।',
+  'मेहनत का कोई विकल्प नहीं — और आप आज भी मेहनत कर रहे हैं, शाबाश!',
+  'रोज़ का एक टेस्ट = परीक्षा-भवन में एक नया आत्मविश्वास।',
+  'लक्ष्य पर नज़र रखिए, अंक अपने-आप बढ़ते जाएँगे।',
+  'आज की तुलना केवल अपने कल से कीजिए — दूसरों से नहीं।',
+  'जो समय आज पढ़ाई में लगाया, वह भविष्य में कई गुना होकर लौटेगा।',
+  'नियमित अभ्यास साधारण विद्यार्थी को भी असाधारण परिणाम देता है।',
+  'हर सुबह एक नया अवसर है — उसे अभ्यास से सार्थक बनाइए।',
+  'कठिन प्रश्न आपको रोकने नहीं, मज़बूत बनाने आते हैं।',
+  'थोड़ा और, रोज़ और — यही सफलता का सीधा मंत्र है।',
+  'आपकी लगन ही आपकी सबसे बड़ी पूँजी है; इसे रोज़ बढ़ाइए।',
+  'परिणाम चाहे जो हो, सीखना कभी व्यर्थ नहीं जाता।',
+  'आज का अभ्यास, कल की सरकारी नौकरी की ओर एक मज़बूत कदम है।',
+  'खुद पर भरोसा रखिए — रोज़ की तैयारी आपको लक्ष्य तक ज़रूर पहुँचाएगी।'
+];
+function thoughtOfDay(d){
+  const t = d ? new Date(d) : new Date();
+  const ist = new Date(t.getTime() + (330 + t.getTimezoneOffset())*60000);     // भारतीय समय की तारीख
+  const day = Math.floor(Date.UTC(ist.getFullYear(), ist.getMonth(), ist.getDate()) / 86400000);
+  return THOUGHTS[day % THOUGHTS.length];
+}
+function wrapText(x, text, maxW){
+  const words = String(text).split(/\s+/), lines = []; let cur = '';
+  for (const w of words){ const t = cur ? cur + ' ' + w : w; if (x.measureText(t).width > maxW && cur){ lines.push(cur); cur = w; } else cur = t; }
+  if (cur) lines.push(cur); return lines;
+}
+async function drawThanks(){
+  const c = lastCard, W=1080, H=1350, cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const x = cv.getContext('2d');
+  try { await document.fonts.load('700 40px Mukta'); await document.fonts.load('400 40px Mukta'); } catch(e){}
+  const F = (w,s) => `${w} ${s}px Mukta, "Noto Sans Devanagari", "Nirmala UI", sans-serif`;
+  const g = x.createLinearGradient(0,0,W,H); g.addColorStop(0,'#B8265A'); g.addColorStop(1,'#5B1A6E');
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+  x.fillStyle='rgba(255,255,255,0.08)'; x.beginPath(); x.arc(W-60,120,220,0,Math.PI*2); x.fill(); x.beginPath(); x.arc(80,H-120,180,0,Math.PI*2); x.fill();
+  x.textAlign='center'; x.fillStyle='#fff';
+  x.font=F(700,96); x.fillText('धन्यवाद!', W/2, 190);
+  x.font=F(400,36); x.fillText('टेस्ट सफलतापूर्वक जमा हुआ', W/2, 250);
+  x.fillStyle='#fff'; x.beginPath(); x.roundRect(80,300,W-160,470,32); x.fill();
+  x.fillStyle='#17223B'; x.font=F(700,50); x.fillText(stName().slice(0,26), W/2, 385);
+  x.fillStyle='#4A5673'; let fs=30; x.font=F(400,fs); while (fs>20 && x.measureText(c.R.name).width>W-220){ fs--; x.font=F(400,fs); } x.fillText(c.R.name, W/2, 432, W-220);
+  x.fillStyle='#4A5673'; x.font=F(400,34); x.fillText('कुल प्राप्तांक', W/2, 505);
+  x.fillStyle='#B8265A'; x.font=F(700,130); x.fillText(`${c.score}/${c.n}`, W/2, 640);
+  x.fillStyle='#4A5673'; x.font=F(400,32); x.fillText(`${c.pct}% · सही ${c.ok} · गलत ${c.bad} · छोड़े ${c.skip}`, W/2, 715);
+  x.fillStyle='rgba(255,255,255,0.14)'; x.beginPath(); x.roundRect(80,820,W-160,360,32); x.fill();
+  x.fillStyle='#FFD98A'; x.font=F(700,36); x.fillText('✦ आज का प्रेरणा-संदेश ✦', W/2, 890);
+  x.fillStyle='#fff'; x.font=F(700,46);
+  const lines = wrapText(x, '“' + thoughtOfDay(c.R.submitted) + '”', W-240).slice(0,4);
+  const top = 1010 - (lines.length-1)*32;
+  lines.forEach((l,i)=> x.fillText(l, W/2, top + i*64));
+  x.font=F(400,30); x.fillStyle='rgba(255,255,255,0.9)';
+  x.fillText(new Date(c.R.submitted).toLocaleDateString('hi-IN',{dateStyle:'long'}) + ' · CSPDCL DEO / स्टेनोग्राफर मॉक टेस्ट', W/2, 1250);
+  x.fillText(SITE_URL, W/2, 1300);
+  x.textAlign='left';
+  return cv;
+}
+async function thanksFile(){ const cv = await drawThanks(); return new Promise(res=>cv.toBlob(b=>res(new File([b], `dhanyavad-${Date.now()}.png`, {type:'image/png'})), 'image/png')); }
+let tyURL = null;
+async function showThanks(){
+  const p = $('ty-panel'); if (!lastCard){ p.hidden = true; return; }
+  try { const cv = await drawThanks(); if (tyURL) URL.revokeObjectURL(tyURL);
+    cv.toBlob(b=>{ if (!b) return; tyURL = URL.createObjectURL(b); $('ty-img').src = tyURL; }, 'image/png'); p.hidden = false; }
+  catch(e){ p.hidden = true; }
+}
+function thanksText(){ const c=lastCard; return `धन्यवाद! मैंने ${c.R.name} में ${c.score}/${c.n} (${c.pct}%) अंक प्राप्त किए।\nआज का प्रेरणा-संदेश: ${thoughtOfDay(c.R.submitted)}\n${SITE_URL}`; }
+$('ty-download').onclick = async ()=>{ if(!lastCard) return; const f = await thanksFile(); const a=document.createElement('a'); a.href=URL.createObjectURL(f); a.download=f.name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1500); };
+$('ty-share').onclick = async ()=>{
+  if(!lastCard) return;
+  try { const f = await thanksFile(); if (navigator.canShare && navigator.canShare({files:[f]})) { await navigator.share({files:[f], text: thanksText()}); return; } } catch(e){ if (e && e.name==='AbortError') return; }
+  window.open('https://wa.me/?text='+encodeURIComponent(thanksText()), '_blank');
+};
 async function cardFile(){ const cv = await drawCard(); return new Promise(res=>cv.toBlob(b=>res(new File([b], `scorecard-${Date.now()}.png`, {type:'image/png'})), 'image/png')); }
 $('sc-download').onclick = async ()=>{ if(!lastCard) return; const f = await cardFile(); const a=document.createElement('a'); a.href=URL.createObjectURL(f); a.download=f.name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1500); };
 $('sc-share').onclick = async ()=>{
