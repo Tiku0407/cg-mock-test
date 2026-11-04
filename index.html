@@ -1064,49 +1064,69 @@ function wrapText(x, text, maxW){
   if (cur) lines.push(cur); return lines;
 }
   function resultMessage(pct){
-  if (pct >= 85)
-    return 'उत्कृष्ट प्रदर्शन! आपकी तैयारी Selection Level की ओर बढ़ रही है।';
-  if (pct >= 70)
-    return 'बहुत बढ़िया! नियमित अभ्यास से आपका Score और बेहतर होगा।';
-  if (pct >= 50)
-    return 'अच्छा प्रयास! अपनी गलतियों की समीक्षा करें और आगे बढ़ते रहें।';
+  if (pct >= 85) return 'उत्कृष्ट प्रदर्शन! आपकी तैयारी Selection Level की ओर बढ़ रही है।';
+  if (pct >= 70) return 'बहुत बढ़िया! नियमित अभ्यास से आपका Score और बेहतर होगा।';
+  if (pct >= 50) return 'अच्छा प्रयास! अपनी गलतियों की समीक्षा करें और आगे बढ़ते रहें।';
   return 'हर Test एक नया अवसर है। हार मत मानिए, अगला Score बेहतर होगा।';
 }
 async function drawThanks(){
-  x.fillStyle='#4A5673';
-x.font=F(400,30);
-const msg = resultMessage(c.pct);
-const msgLines = wrapText(x, msg, W-220);
-msgLines.forEach((line,i)=>{
-  x.fillText(line, W/2, 475 + i*38);
-});
   const c = lastCard, W=1080, H=1350, cv=document.createElement('canvas'); cv.width=W; cv.height=H;
   const x = cv.getContext('2d');
   try { await document.fonts.load('700 40px Mukta'); await document.fonts.load('400 40px Mukta'); } catch(e){}
   const F = (w,s) => `${w} ${s}px Mukta, "Noto Sans Devanagari", "Nirmala UI", sans-serif`;
-  const g = x.createLinearGradient(0,0,W,H); g.addColorStop(0,'#B8265A'); g.addColorStop(1,'#5B1A6E');
+
+  const g = x.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#B8265A'); g.addColorStop(1,'#5B1A6E');
   x.fillStyle=g; x.fillRect(0,0,W,H);
-  x.fillStyle='rgba(255,255,255,0.08)'; x.beginPath(); x.arc(W-60,120,220,0,Math.PI*2); x.fill(); x.beginPath(); x.arc(80,H-120,180,0,Math.PI*2); x.fill();
+
+  x.fillStyle='rgba(255,255,255,0.08)';
+  x.beginPath(); x.arc(W-60,120,220,0,Math.PI*2); x.fill();
+  x.beginPath(); x.arc(80,H-120,180,0,Math.PI*2); x.fill();
+
   x.textAlign='center'; x.fillStyle='#fff';
- x.font=F(700,88);
-x.fillText('बधाई हो!', W/2, 185);
-x.font=F(400,34);
-x.fillText('आपने सफलतापूर्वक Mock Test पूरा किया', W/2, 245);
-  x.fillStyle='#fff'; x.beginPath(); x.roundRect(80,300,W-160,470,32); x.fill();
-  x.fillStyle='#17223B'; x.font=F(700,50); x.fillText(stName().slice(0,26), W/2, 385);
-  x.fillStyle='#4A5673'; let fs=30; x.font=F(400,fs); while (fs>20 && x.measureText(c.R.name).width>W-220){ fs--; x.font=F(400,fs); } x.fillText(c.R.name, W/2, 432, W-220);
-  x.fillStyle='#4A5673'; x.font=F(400,34); x.fillText('कुल प्राप्तांक', W/2, 505);
-  x.fillStyle='#B8265A'; x.font=F(700,130); x.fillText(`${c.score}/${c.n}`, W/2, 640);
-  x.fillStyle='#4A5673'; x.font=F(400,32); x.fillText(`${c.pct}% · सही ${c.ok} · गलत ${c.bad} · छोड़े ${c.skip}`, W/2, 715);
-  x.fillStyle='rgba(255,255,255,0.14)'; x.beginPath(); x.roundRect(80,820,W-160,360,32); x.fill();
-  x.fillStyle='#FFD98A'; x.font=F(700,36); x.fillText('✦ आज का प्रेरणा-संदेश ✦', W/2, 890);
-  x.fillStyle='#fff'; x.font=F(700,46);
+  x.font=F(700,88); x.fillText('बधाई हो!', W/2, 175);
+  x.font=F(400,33); x.fillText('आपने सफलतापूर्वक Mock Test पूरा किया', W/2, 235);
+
+  x.fillStyle='#fff'; x.beginPath(); x.roundRect(80,285,W-160,505,32); x.fill();
+
+  x.fillStyle='#17223B'; x.font=F(700,50);
+  x.fillText(stName().slice(0,26), W/2, 365);
+
+  x.fillStyle='#4A5673';
+  let fs=30; x.font=F(400,fs);
+  while (fs>20 && x.measureText(c.R.name).width>W-220){ fs--; x.font=F(400,fs); }
+  x.fillText(c.R.name, W/2, 415, W-220);
+
+  // Score-based congratulation message
+  x.font=F(600,29);
+  const msgLines = wrapText(x, resultMessage(c.pct), W-220).slice(0,3);
+  msgLines.forEach((line,i)=>x.fillText(line, W/2, 465 + i*36));
+
+  x.fillStyle='#4A5673'; x.font=F(400,32);
+  x.fillText('कुल प्राप्तांक', W/2, 585);
+
+  x.fillStyle='#B8265A'; x.font=F(700,126);
+  x.fillText(`${c.score}/${c.n}`, W/2, 705);
+
+  x.fillStyle='#4A5673'; x.font=F(400,31);
+  x.fillText(`${c.pct}% · सही ${c.ok} · गलत ${c.bad} · छोड़े ${c.skip}`, W/2, 755);
+
+  x.fillStyle='rgba(255,255,255,0.14)';
+  x.beginPath(); x.roundRect(80,835,W-160,325,32); x.fill();
+
+  x.fillStyle='#FFD98A'; x.font=F(700,36);
+  x.fillText('✦ आज का प्रेरणा-संदेश ✦', W/2, 900);
+
+  x.fillStyle='#fff'; x.font=F(700,45);
   const lines = wrapText(x, '“' + thoughtOfDay(c.R.submitted) + '”', W-240).slice(0,4);
-  const top = 1010 - (lines.length-1)*32;
-  lines.forEach((l,i)=> x.fillText(l, W/2, top + i*64));
-  x.font=F(400,30); x.fillStyle='rgba(255,255,255,0.9)';
+  const top = 1010 - (lines.length-1)*30;
+  lines.forEach((l,i)=> x.fillText(l, W/2, top + i*60));
+
+  x.font=F(400,29); x.fillStyle='rgba(255,255,255,0.9)';
   x.fillText(new Date(c.R.submitted).toLocaleDateString('hi-IN',{dateStyle:'long'}) + ' · CSPDCL DEO / स्टेनोग्राफर मॉक टेस्ट', W/2, 1250);
-  x.fillText(SITE_URL, W/2, 1300);
+  x.fillText('Practice • Improve • Succeed', W/2, 1292);
+  x.font=F(400,24); x.fillText(SITE_URL, W/2, 1325);
+
   x.textAlign='left';
   return cv;
 }
@@ -1118,7 +1138,7 @@ async function showThanks(){
     cv.toBlob(b=>{ if (!b) return; tyURL = URL.createObjectURL(b); $('ty-img').src = tyURL; }, 'image/png'); p.hidden = false; }
   catch(e){ p.hidden = true; }
 }
-function thanksText(){ const c=lastCard; return `धन्यवाद! मैंने ${c.R.name} में ${c.score}/${c.n} (${c.pct}%) अंक प्राप्त किए।\nआज का प्रेरणा-संदेश: ${thoughtOfDay(c.R.submitted)}\n${SITE_URL}`; }
+function thanksText(){ const c=lastCard; return `बधाई! मैंने ${c.R.name} में ${c.score}/${c.n} (${c.pct}%) अंक प्राप्त किए।\n${resultMessage(c.pct)}\nआज का प्रेरणा-संदेश: ${thoughtOfDay(c.R.submitted)}\n${SITE_URL}`; }
 $('ty-download').onclick = async ()=>{ if(!lastCard) return; const f = await thanksFile(); const a=document.createElement('a'); a.href=URL.createObjectURL(f); a.download=f.name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1500); };
 $('ty-share').onclick = async ()=>{
   if(!lastCard) return;
