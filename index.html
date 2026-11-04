@@ -1063,7 +1063,23 @@ function wrapText(x, text, maxW){
   for (const w of words){ const t = cur ? cur + ' ' + w : w; if (x.measureText(t).width > maxW && cur){ lines.push(cur); cur = w; } else cur = t; }
   if (cur) lines.push(cur); return lines;
 }
+  function resultMessage(pct){
+  if (pct >= 85)
+    return 'उत्कृष्ट प्रदर्शन! आपकी तैयारी Selection Level की ओर बढ़ रही है।';
+  if (pct >= 70)
+    return 'बहुत बढ़िया! नियमित अभ्यास से आपका Score और बेहतर होगा।';
+  if (pct >= 50)
+    return 'अच्छा प्रयास! अपनी गलतियों की समीक्षा करें और आगे बढ़ते रहें।';
+  return 'हर Test एक नया अवसर है। हार मत मानिए, अगला Score बेहतर होगा।';
+}
 async function drawThanks(){
+  x.fillStyle='#4A5673';
+x.font=F(400,30);
+const msg = resultMessage(c.pct);
+const msgLines = wrapText(x, msg, W-220);
+msgLines.forEach((line,i)=>{
+  x.fillText(line, W/2, 475 + i*38);
+});
   const c = lastCard, W=1080, H=1350, cv=document.createElement('canvas'); cv.width=W; cv.height=H;
   const x = cv.getContext('2d');
   try { await document.fonts.load('700 40px Mukta'); await document.fonts.load('400 40px Mukta'); } catch(e){}
