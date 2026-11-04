@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CGSSB Leaderboard</title>
+<style>
+:root{--navy:#102b4e;--gold:#d6a426;--bg:#f5f7fb;--line:#dfe6ef;--muted:#6c7a8e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Devanagari",sans-serif;color:#17263c}
+.wrap{max-width:980px;margin:auto;padding:22px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(20,50,90,.06)}
+.head{display:flex;justify-content:space-between;gap:14px;align-items:center}.title h1{margin:4px 0;font-size:1.7rem}.title p{margin:0;color:var(--muted)}
+.badge{display:inline-block;background:#edf3fa;color:var(--navy);font-weight:800;border-radius:999px;padding:5px 10px;font-size:.8rem}
+.tabs{display:flex;gap:8px;margin:20px 0}.tab{border:1px solid var(--line);background:#fff;padding:10px 15px;border-radius:10px;font-weight:800;cursor:pointer}.tab.active{background:var(--navy);color:#fff}
+.refresh{border:0;background:#edf3fa;color:var(--navy);border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
+table{width:100%;border-collapse:collapse}th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left}th{font-size:.82rem;color:var(--muted);background:#fafbfd}.rank{font-weight:900}.r1{color:#a87500}.r2{color:#687484}.r3{color:#a65f2b}
+.small{color:var(--muted);font-size:.82rem}.status{margin-top:14px;color:var(--muted);font-size:.85rem}.error{color:#b42318}
+.back{display:inline-block;margin-top:16px;color:var(--navy);font-weight:800;text-decoration:none}
+@media(max-width:700px){.wrap{padding:12px}.card{padding:14px}.head{align-items:flex-start}.tablebox{overflow:auto}th,td{white-space:nowrap}.title h1{font-size:1.35rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+  <div class="head">
+    <div class="title">
+      <span class="badge">CGSSB MOCK TEST</span>
+      <h1 id="heading">Daily Leaderboard — आज के Champions</h1>
+      <p>Exam Mode • Best Score per Candidate</p>
+    </div>
+    <button class="refresh" onclick="loadBoard()">Refresh</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-type="daily">Daily</button>
+    <button class="tab" data-type="weekly">Weekly</button>
+    <button class="tab" data-type="monthly">Monthly</button>
+  </div>
+
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Rank</th><th>Name</th><th>Score</th><th>Set</th><th>Time</th><th>Correct</th></tr></thead>
+      <tbody id="body"><tr><td colspan="6">Loading...</td></tr></tbody>
+    </table>
+  </div>
+  <div id="status" class="status"></div>
+  <a class="back" href="./">← Mock Test Home</a>
+</div>
+</div>
+<script>
+const API='https://script.google.com/macros/s/AKfycbzYENIKHd9yJZuxaX2NvIvM3Sazjifcf6QQUsdC8IB9izCDeCR2Fq2suE8l_uWiMk6cxw/exec';
+let type='daily';
+const titleMap={daily:'Daily Leaderboard — आज के Champions',weekly:'Weekly Leaderboard — सप्ताह के Champions',monthly:'Monthly Leaderboard — महीने के Champions'};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');type=b.dataset.type;loadBoard();});
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function loadBoard(){
+  document.getElementById('heading').textContent=titleMap[type];
+  document.getElementById('body').innerHTML='<tr><td colspan="6">Loading...</td></tr>';
+  document.getElementById('status').textContent='';
+  try{
+    const r=await fetch(API+'?action=leaderboard&type='+encodeURIComponent(type)+'&_='+Date.now());
+    const d=await r.json();
+    if(!d.ok) throw new Error(d.error||'API error');
+    const rows=d.rows||[];
+    document.getElementById('body').innerHTML=rows.length?rows.map(x=>`<tr>
+      <td class="rank r${x.rank}">${x.rank<=3?['🥇','🥈','🥉'][x.rank-1]+' ':''}${x.rank}</td>
+      <td><b>${esc(x.name)}</b></td>
+      <td><b>${x.score}/${x.total}</b><div class="small">${x.percentage}%</div></td>
+      <td>Set ${esc(x.set)}</td>
+      <td>${x.timeMinutes} min</td>
+      <td>${x.correct}</td>
+    </tr>`).join(''):'<tr><td colspan="6">इस अवधि में अभी कोई eligible Exam result नहीं है।</td></tr>';
+    document.getElementById('status').textContent='Updated: '+new Date(d.generated_at).toLocaleString('hi-IN');
+  }catch(e){
+    document.getElementById('body').innerHTML='<tr><td colspan="6" class="error">Leaderboard API अभी connect नहीं है। Apps Script में leaderboard.gs जोड़कर existing deployment का New Version deploy करें।</td></tr>';
+    document.getElementById('status').textContent=String(e.message||e);
+  }
+}
+loadBoard();
+</script>
+</body></html>
