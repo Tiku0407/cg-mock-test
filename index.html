@@ -1072,8 +1072,10 @@ async function drawThanks(){
   x.fillStyle=g; x.fillRect(0,0,W,H);
   x.fillStyle='rgba(255,255,255,0.08)'; x.beginPath(); x.arc(W-60,120,220,0,Math.PI*2); x.fill(); x.beginPath(); x.arc(80,H-120,180,0,Math.PI*2); x.fill();
   x.textAlign='center'; x.fillStyle='#fff';
-  x.font=F(700,96); x.fillText('धन्यवाद!', W/2, 190);
-  x.font=F(400,36); x.fillText('टेस्ट सफलतापूर्वक जमा हुआ', W/2, 250);
+ x.font=F(700,88);
+x.fillText('बधाई हो!', W/2, 185);
+x.font=F(400,34);
+x.fillText('आपने सफलतापूर्वक Mock Test पूरा किया', W/2, 245);
   x.fillStyle='#fff'; x.beginPath(); x.roundRect(80,300,W-160,470,32); x.fill();
   x.fillStyle='#17223B'; x.font=F(700,50); x.fillText(stName().slice(0,26), W/2, 385);
   x.fillStyle='#4A5673'; let fs=30; x.font=F(400,fs); while (fs>20 && x.measureText(c.R.name).width>W-220){ fs--; x.font=F(400,fs); } x.fillText(c.R.name, W/2, 432, W-220);
