@@ -12,11 +12,24 @@ const ROOT = path.join(__dirname, '..');
 (async () => {
   const errs = [], fail = m => { console.log('FAIL', m, errs); process.exit(1); };
   let legacy = 0, gas = null;
-  const getGas = () => gas || (gas = makeGAS({
-    props: { GRADER_SECRET: process.env.GRADER_SECRET || '' },
-    fetchUrl: u => { try { return fs.readFileSync(path.join(ROOT, 'keys', u.split('/keys/')[1]), 'utf8'); } catch (e) { return null; } },
-    legacy: () => { legacy++; return { text: '{"ok":true}' }; },
-  }));
+  const getGas = () => {
+    if (gas) return gas;
+    gas = makeGAS({
+      props: { GRADER_SECRET: process.env.GRADER_SECRET || '' },
+      fetchUrl: u => { try { return fs.readFileSync(path.join(ROOT, 'keys', u.split('/keys/')[1]), 'utf8'); } catch (e) { return null; } },
+      legacy: () => { legacy++; return { text: '{"ok":true}' }; },
+    });
+    // sheet-key mode: preload newest private answer key directly into the mock hidden sheet.
+    try {
+      const files = fs.readdirSync(path.join(ROOT, 'private')).filter(x => /^key-set\d+\.json$/.test(x)).sort();
+      if (files.length) {
+        const K = JSON.parse(fs.readFileSync(path.join(ROOT, 'private', files[files.length-1]), 'utf8'));
+        const sh = gas.ctx.keySheet_();
+        sh.appendRow([K.no, new Date(), Date.now(), JSON.stringify({ secs: K.secs, neg: K.neg, minutes: K.minutes, a: K.a }), JSON.stringify(K.e || [])]);
+      }
+    } catch (e) {}
+    return gas;
+  };
   const exe = ['/opt/pw-browsers/chromium-1194/chrome-linux/chrome'].find(f => fs.existsSync(f));
   const b = await chromium.launch(exe ? { executablePath: exe } : {});
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 } });
@@ -32,7 +45,10 @@ const ROOT = path.join(__dirname, '..');
   await p.goto('file://' + path.join(ROOT, 'index.html'));
   const info = await p.evaluate(() => { const no = Math.max(...CG.sets.map(s => s.no)); cfg.set = 'cg:' + no; cfg.mode = 'exam'; saveCfg(); return { no, server: isSrv(cfg), n: CG_IDX[no].length }; });
   if (info.n !== 100) fail('नवीनतम सेट में 100 प्रश्न नहीं: ' + info.n);
-  if (info.server && !process.env.GRADER_SECRET) fail('सर्वर-सेट के परीक्षण के लिए GRADER_SECRET चाहिए');
+  if (info.server && !process.env.GRADER_SECRET) {
+    const p = path.join(ROOT, 'private', 'key-set' + String(info.no).padStart(2,'0') + '.json');
+    if (!fs.existsSync(p)) fail('सर्वर-सेट के परीक्षण के लिए GRADER_SECRET या private sheet-key JSON चाहिए');
+  }
   await p.fill('#st-name', 'परीक्षण'); await p.fill('#st-mob', '9999999999');
   await p.click('#start');
   try { await p.waitForSelector('#exam:not([hidden])', { timeout: 8000 }); } catch (e) { fail('परीक्षा शुरू नहीं हुई: ' + (await p.textContent('#attempt-msg'))); }
