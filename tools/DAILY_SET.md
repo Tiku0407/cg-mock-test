@@ -68,6 +68,24 @@
 6. जाँच: `node tools/smoke_test.js` — `PASS` आना चाहिए। यह नवीनतम सेट को परीक्षा मोड में खोलकर (नाम "परीक्षण", मोबाइल 9999999999) 1 उत्तर देकर जमा करता है, JS त्रुटियाँ पकड़ता है और `script.google.com` के अनुरोध असली Sheet तक नहीं जाने देता (सर्वर-सेट के लिए नकली Apps Script उत्तर देता है)। `FAIL` आए तो push न करें; कारण ठीक करें।
 7. commit (संदेश: `मॉक टेस्ट NN (स्तर-नाम) जोड़ा`) और `git push origin main`।
 
+## ChatGPT automation के लिए सुरक्षित sheet-key mode
+
+जब ChatGPT automation नया server-secure set बनाए, तो `GRADER_SECRET` की जरूरत नहीं है।
+
+- चरण 5 में `--server` की जगह `--sheet-key` इस्तेमाल करें।
+- इससे public `index.html` में answers/व्याख्या नहीं जाएँगे।
+- `private/key-setNN.json` बनेगा; `private/` gitignored है, इसलिए इसे GitHub पर commit/push नहीं करना है।
+- इस JSON में `no, secs, neg, minutes, a, e` होते हैं।
+- Google Sheet **CSPDCL मॉक टेस्ट स्कोर** की hidden tab **उत्तर-कुंजी (गुप्त)** में एक नई row append करें:
+  - Column A = set number
+  - Column B = current date/time
+  - Column C = current Unix epoch milliseconds (publication time)
+  - Column D = JSON string: `{"secs":...,"neg":0.25,"minutes":120,"a":[...]}`
+  - Column E = explanations array `e` का JSON string
+- Sheet में row लिखने के बाद ही GitHub commit/push करें।
+- Smoke test अब `private/key-setNN.json` मिलने पर `GRADER_SECRET` के बिना भी server grading verify कर सकता है।
+- सुरक्षा नियम: `private/key-setNN.json` या answers कभी GitHub, chat output, logs, या public files में न डालें।
+
 ## सर्वर-जाँच मोड (जब फ़ाइल `tools/SERVER_MODE` मौजूद हो)
 शिक्षक की Google Sheet में `apps-script/grader.gs` लगा है (विधि: `apps-script/SETUP.md`)। ऐसे सेट में सही उत्तर वेबसाइट पर नहीं जाते।
 - गुप्त कुंजी प्रोजेक्ट-फ़ाइल `claude/grader-secret.md` में है (Projects tool → `project_read`)। उसे केवल environment में रखें: `export GRADER_SECRET='…'`। इसे कभी commit न करें, न किसी फ़ाइल, आउटपुट या सार में लिखें।
