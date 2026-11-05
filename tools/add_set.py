@@ -2,7 +2,7 @@
 """नया मॉक टेस्ट सेट वेबसाइट में जोड़ता है।
 
 उपयोग:
-  python3 tools/add_set.py 07 sets/set07.js "मिश्रित स्तर" "07 अक्टूबर 2026" [--server]
+  python3 tools/add_set.py 07 sets/set07.js "मिश्रित स्तर" "07 अक्टूबर 2026" [--server | --sheet-key]
 
 --server : सर्वर-जाँच वाला सेट (apps-script/grader.gs)। सही उत्तर/व्याख्या वेबसाइट में नहीं जाते;
            वे GRADER_SECRET से कूटबद्ध होकर keys/setNN.key में जाते हैं, और प्रिंट-पेपर व .md सूची
@@ -17,8 +17,9 @@ import json, sys, subprocess, html, re, random
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SERVER = '--server' in sys.argv
-NN, src, level, date = [x for x in sys.argv[1:] if x != '--server'][:4]
+SHEET_KEY = '--sheet-key' in sys.argv
+SERVER = '--server' in sys.argv or SHEET_KEY
+NN, src, level, date = [x for x in sys.argv[1:] if x not in ('--server','--sheet-key')][:4]
 no = int(NN)
 L = "ABCD"; kh = "ABCDEF"; e = html.escape
 DI = {'सरल': 0, 'मध्यम': 1, 'कठिन': 2}
@@ -67,13 +68,19 @@ for i, s in enumerate(raw):
             cq.append([DI[x['d']], x['q'], x['o'], x['a'], x['e']])
 meta = {'no': no, 'label': f'मॉक टेस्ट {NN} — पूर्ण प्रश्नपत्र ({level})', 'badge': NN, 'q': cq}
 if SERVER:
-    from keycrypt import encrypt, secret
     meta.update({'server': True, 'neg': 0.25, 'minutes': 120})
     key = {'no': no, 'secs': [[nm, ln] for nm, ln in A['cg']['sections']], 'neg': 0.25, 'minutes': 120,
            'a': [x['a'] for s in raw for x in s['qs']], 'e': [x['e'] for s in raw for x in s['qs']]}
     assert sum(ln for _, ln in key['secs']) == len(key['a']) == 100
-    (ROOT/'keys').mkdir(exist_ok=True)
-    (ROOT/f'keys/set{NN}.key').write_text(encrypt(key, secret()) + '\n')
+    if SHEET_KEY:
+        # ChatGPT automation mode: keep answer-bearing material only in gitignored private/.
+        # The automation writes this key into the hidden Google Sheet tab उत्तर-कुंजी (गुप्त).
+        (ROOT/'private').mkdir(exist_ok=True)
+        (ROOT/f'private/key-set{NN}.json').write_text(json.dumps(key, ensure_ascii=False))
+    else:
+        from keycrypt import encrypt, secret
+        (ROOT/'keys').mkdir(exist_ok=True)
+        (ROOT/f'keys/set{NN}.key').write_text(encrypt(key, secret()) + '\n')
 A['cg']['sets'].append(meta)
 idx = save(idx, A, span)
 idx = idx.replace(f"'cg:{prev}'", f"'cg:{no}'")
