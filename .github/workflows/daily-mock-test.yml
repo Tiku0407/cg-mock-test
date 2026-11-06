@@ -1,0 +1,99 @@
+name: Daily Mock Test Publish
+
+on:
+  schedule:
+    - cron: "30 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-mock-test
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GRADER_SECRET: ${{ secrets.GRADER_SECRET }}
+      OPENAI_MODEL: gpt-6-astra
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          pip install openai
+          npm init -y >/dev/null 2>&1 || true
+          npm install playwright
+          npx playwright install --with-deps chromium
+
+      - name: Verify required secrets
+        shell: bash
+        run: |
+          test -n "$OPENAI_API_KEY" || (echo "OPENAI_API_KEY missing"; exit 1)
+          test -n "$GRADER_SECRET" || (echo "GRADER_SECRET missing"; exit 1)
+
+      - name: Generate next set
+        id: gen
+        shell: bash
+        run: |
+          OUT="$(python tools/generate_daily_set.py)"
+          echo "$OUT"
+          SET_NO="$(echo "$OUT" | sed -n 's/^SET_NO=//p' | tail -1)"
+          LEVEL_NAME="$(echo "$OUT" | sed -n 's/^LEVEL_NAME=//p' | tail -1)"
+          test -n "$SET_NO"
+          echo "set_no=$SET_NO" >> "$GITHUB_OUTPUT"
+          echo "level_name=$LEVEL_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Duplicate check
+        run: python tools/dupcheck.py "private/set${{ steps.gen.outputs.set_no }}.js"
+
+      - name: Difficulty validation
+        run: python tools/level.py "${{ steps.gen.outputs.set_no }}" "private/set${{ steps.gen.outputs.set_no }}.js"
+
+      - name: Add secure server set
+        shell: bash
+        run: |
+          DATE_HI="$(TZ=Asia/Kolkata date '+%d-%m-%Y')"
+          python tools/add_set.py "${{ steps.gen.outputs.set_no }}" "private/set${{ steps.gen.outputs.set_no }}.js" "${{ steps.gen.outputs.level_name }}" "$DATE_HI" --server
+
+      - name: Smoke test
+        run: node tools/smoke_test.js
+
+      - name: Ensure private files are not tracked
+        shell: bash
+        run: |
+          if git status --porcelain | grep -E '(^| )private/'; then
+            echo "Private answer-bearing files would be committed. Aborting."
+            exit 1
+          fi
+
+      - name: Commit and publish
+        shell: bash
+        run: |
+          git config user.name "CGSSB Daily Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html keys/ papers/ lists/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No public changes to commit"
+            exit 1
+          fi
+          git commit -m "Daily mock test ${{ steps.gen.outputs.set_no }} published"
+          git push origin main
