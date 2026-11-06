@@ -4,21 +4,17 @@
 उपयोग:
   python3 tools/level.py 11                  # सेट 11 का लक्ष्य दिखाएँ
   python3 tools/level.py 11 private/set11.js # बने हुए सेट को लक्ष्य से मिलाएँ (अंतर हो तो exit 1)
+  python3 tools/level.py 01 private/vyapam01.js --series vyapam   # व्यापम सीरीज़ (क्रमांक सीरीज़ का)
 """
 import json, subprocess, sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent)); import series as SER
+SNAME, _ARGV = SER.arg_series(sys.argv[1:]) if __name__ == '__main__' else ('cspdcl', [])
 
 # (पहला सेट, स्तर, सरल, मध्यम, कठिन) — हर 3 सेट पर एक सीढ़ी ऊपर
-LADDER = [
-    (1, 0, 50, 0, 50),     # सेट 01–10: पुराना "मिश्रित" स्तर
-    (11, 1, 40, 20, 40),
-    (14, 2, 30, 30, 40),
-    (17, 3, 20, 35, 45),
-    (20, 4, 15, 35, 50),
-    (23, 5, 10, 30, 60),   # अंतिम (परीक्षा से कठिन) स्तर — आगे यही रहेगा
-]
-SECS = [('छत्तीसगढ़ GK + समसामयिकी', 25), ('कम्प्यूटर', 15), ('मानसिक योग्यता', 15),
-        ('सामान्य गणित', 15), ('सामान्य हिन्दी', 20), ('सामान्य अंग्रेजी', 10)]
+# CSPDCL: सेट 01–10 पुराना "मिश्रित" स्तर, 11 से प्रगतिशील; व्यापम: V01 से प्रगतिशील (series.py देखें)
+LADDER = SER.get(SNAME)['ladder']
+SECS = list(zip(SER.get(SNAME)['level_names'], SER.get(SNAME)['marks']))
 D = ['सरल', 'मध्यम', 'कठिन']
 
 
@@ -45,8 +41,9 @@ def label(no):
 
 
 if __name__ == '__main__':
+    sys.argv = [sys.argv[0]] + _ARGV
     no = int(sys.argv[1]); lvl, tot, out = target(no)
-    print(f'सेट {no:02d}: {label(no)} — कुल सरल {tot[0]} · मध्यम {tot[1]} · कठिन {tot[2]}')
+    print(f'सेट {SER.get(SNAME)["badge"]}{no:02d}: {label(no)} — कुल सरल {tot[0]} · मध्यम {tot[1]} · कठिन {tot[2]}')
     for (nm, n), o in zip(SECS, out):
         print(f'  {nm} ({n}): सरल {o[0]}, मध्यम {o[1]}, कठिन {o[2]}')
     if len(sys.argv) > 2:

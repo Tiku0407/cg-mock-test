@@ -43,7 +43,8 @@ const ROOT = path.join(__dirname, '..');
   const p = await ctx.newPage();
   p.on('pageerror', e => errs.push(String(e)));
   await p.goto('file://' + path.join(ROOT, 'index.html'));
-  const info = await p.evaluate(() => { const no = Math.max(...CG.sets.map(s => s.no)); cfg.set = 'cg:' + no; cfg.mode = 'exam'; saveCfg(); return { no, server: isSrv(cfg), n: CG_IDX[no].length }; });
+  const want = Number(process.argv[2] || process.env.SMOKE_SET || 0);   // उदा. व्यापम V01 के लिए 1001
+  const info = await p.evaluate((want) => { const no = want || Math.max(...CG.sets.filter(s => !s.series).map(s => s.no)); cfg.set = 'cg:' + no; cfg.mode = 'exam'; saveCfg(); return { no, server: isSrv(cfg), n: CG_IDX[no].length }; }, want);
   if (info.n !== 100) fail('नवीनतम सेट में 100 प्रश्न नहीं: ' + info.n);
   if (info.server && !process.env.GRADER_SECRET) {
     const p = path.join(ROOT, 'private', 'key-set' + String(info.no).padStart(2,'0') + '.json');

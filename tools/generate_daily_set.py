@@ -6,7 +6,7 @@ from openai import OpenAI
 ROOT = Path(__file__).resolve().parent.parent
 
 def latest_set():
-    code = "import sys;sys.path.insert(0,'tools');from datacodec import load;A,_=load(open('index.html').read());print(max(s['no'] for s in A['cg']['sets']))"
+    code = "import sys;sys.path.insert(0,'tools');from datacodec import load;A,_=load(open('index.html').read());print(max(s['no'] for s in A['cg']['sets'] if not s.get('series')))"
     return int(subprocess.check_output([sys.executable, "-c", code], cwd=ROOT).decode().strip())
 
 def level_name(no):
