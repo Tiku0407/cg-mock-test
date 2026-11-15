@@ -152,6 +152,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,label:focus-within
 .set-card.full{grid-column:1/-1;border-style:dashed}
 .set-card.full .no{font-size:13px}
 .set-card.cg .no{font-size:12px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--surface-2);border-radius:12px;padding:5px;margin:0 0 14px}
+.tab{border:0;background:transparent;border-radius:9px;padding:9px 10px;min-height:52px;display:grid;gap:1px;text-align:center;font-weight:600;font-size:15.5px;line-height:1.3;color:var(--ink-2)}
+.tab small{font-size:12.5px;font-weight:500;color:var(--ink-3)}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--surface);color:var(--accent);box-shadow:var(--shadow)}
+.tab[aria-selected="true"] small{color:var(--ink-2)}
+@media (max-width:860px){.tab{font-size:14.5px;padding:8px 6px}}
 .grp-h{grid-column:1/-1;font-size:13px;font-weight:700;color:var(--ink-3);margin:8px 0 -2px;letter-spacing:.02em}
 .chip.sec{background:var(--accent-soft);color:var(--accent)}
 .seg button:disabled{opacity:.45;cursor:not-allowed}
@@ -306,8 +313,9 @@ body.exam-lock #exam{-webkit-user-select:none;user-select:none;-webkit-touch-cal
   <div class="setup">
     <div class="panel">
       <h2>सेट चुनें</h2>
-      <p class="sub">पूरा प्रश्नपत्र दें, या किसी एक भाग का अलग से अभ्यास करें।</p>
-      <div class="sets" id="sets" role="group" aria-label="सेट"></div>
+      <p class="sub" id="sets-sub">पूरा प्रश्नपत्र दें, या किसी एक भाग का अलग से अभ्यास करें।</p>
+      <div class="tabs" id="tabs" role="tablist" aria-label="परीक्षा चुनें"></div>
+      <div class="sets" id="sets" role="tabpanel" aria-labelledby="tab-cspdcl"></div>
     </div>
 
     <div class="panel">
@@ -543,18 +551,53 @@ function setMeta(){
   const best = store.get('cspdcl-best') || {};
   return best;
 }
+// ---------- परीक्षा टैब (CSPDCL / व्यापम) ----------
+const TABS = [['cspdcl','⚡ CSPDCL','DEO / स्टेनो'],['vyapam','📘 व्यापम समूह-2','उप-समूह 02']];
+const TAB_SUB = {cspdcl:'पूरा प्रश्नपत्र दें, या किसी एक भाग का अलग से अभ्यास करें।', vyapam:'छत्तीसगढ़ व्यापम समूह-2 तृतीय श्रेणी (उप-समूह 02) के पूर्ण मॉक टेस्ट।'};
+const tabOf = set => (typeof set==='string' && (CG_META[Number(set.slice(3))]||{}).series==='vyapam') ? 'vyapam' : 'cspdcl';
+const tabSets = t => CG.sets.filter(x => t==='vyapam' ? x.series==='vyapam' : !x.series);
+let TAB = location.hash==='#vyapam' && tabSets('vyapam').length ? 'vyapam' : location.hash==='#cspdcl' ? 'cspdcl' : tabOf(cfg.set);
+function selectTab(t){
+  if (t===TAB) return;
+  TAB = t;
+  if (tabOf(cfg.set)!==t){   // दूसरे टैब पर जाते ही उस टैब का अपना पिछला चुना सेट, नहीं तो सबसे नया सेट
+    const last = (store.get('cspdcl-tabsel')||{})[t];
+    const list = tabSets(t);
+    cfg.set = (typeof last==='string' && CG_IDX[Number(last.slice(3))] && tabOf(last)===t) ? last : (list.length ? 'cg:'+list[list.length-1].no : cfg.set);
+    saveCfg();
+  }
+  try { history.replaceState(null, '', '#'+t); } catch(e){}
+  renderSets(); seg('seg-count', COUNT_OPTS, 'count'); renderSummary();
+}
+function renderTabs(){
+  const box = $('tabs'); if (!box) return; box.innerHTML = '';
+  for (const [t, label, tag] of TABS){
+    const n = tabSets(t).length; if (t==='vyapam' && !n) continue;
+    const b = document.createElement('button'); b.type='button'; b.className='tab'; b.id='tab-'+t;
+    b.setAttribute('role','tab'); b.setAttribute('aria-selected', String(TAB===t)); b.tabIndex = TAB===t ? 0 : -1;
+    b.innerHTML = `<span>${label}</span><small>${tag} · ${n} मॉक टेस्ट</small>`;
+    b.onclick = () => selectTab(t);
+    b.onkeydown = e => { if (e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); const o = TABS.map(x=>x[0]).filter(x=>x!=='vyapam'||tabSets('vyapam').length); const nx = o[(o.indexOf(TAB)+(e.key==='ArrowRight'?1:o.length-1))%o.length]; selectTab(nx); const el=$('tab-'+nx); if(el) el.focus(); } };
+    box.appendChild(b);
+  }
+  $('sets').setAttribute('aria-labelledby', 'tab-'+TAB);
+  if ($('sets-sub')) $('sets-sub').textContent = TAB_SUB[TAB];
+}
 function renderSets(){
   const best = setMeta();
+  renderTabs();
   const box = $('sets'); box.innerHTML = '';
-  const items = [['h','पूर्ण मॉक टेस्ट — आधिकारिक अंक-विभाजन (25 + 15 + 15 + 15 + 20 + 10 = 100)']];
-  for (const st of CG.sets.filter(x=>!x.series).reverse()) items.push(['cg:'+st.no, 'CG GK 25 · कम्प्यूटर 15 · मानसिक योग्यता 15 · गणित 15 · हिन्दी 20 · अंग्रेजी 10']);
-  const VY = CG.sets.filter(x=>x.series==='vyapam');
+  const items = TAB==='vyapam' ? [] : [['h','पूर्ण मॉक टेस्ट — आधिकारिक अंक-विभाजन (25 + 15 + 15 + 15 + 20 + 10 = 100)']];
+  if (TAB==='cspdcl') for (const st of CG.sets.filter(x=>!x.series).reverse()) items.push(['cg:'+st.no, 'CG GK 25 · कम्प्यूटर 15 · मानसिक योग्यता 15 · गणित 15 · हिन्दी 20 · अंग्रेजी 10']);
+  const VY = TAB==='vyapam' ? CG.sets.filter(x=>x.series==='vyapam') : [];
   if (VY.length){ items.push(['h','व्यापम समूह-2 तृतीय श्रेणी (उप-समूह 02) — पूर्ण मॉक टेस्ट (20 + 20 + 20 + 10 + 10 + 10 + 10 = 100)']);
     for (const st of VY.slice().reverse()) items.push(['cg:'+st.no, 'कम्प्यूटर 20 · सामान्य अध्ययन 20 · CG GK 20 · मानसिक योग्यता 10 · गणित 10 · हिन्दी 10 · English 10']); }
+  if (TAB==='cspdcl'){
   items.push(['h','भाग-वार अभ्यास (सभी मॉक टेस्ट के प्रश्न)']);
   Object.keys(DATA.topics).map(Number).sort((a,b)=>a-b).forEach(n=>{ items.push([n, DATA.topics[n]+' · '+DATA.q.filter(q=>q[0]===n).length+' प्रश्न']); });
   items.push(['h','अन्य']);
   items.push([0, 'मिश्रित — सभी भागों और सेटों से यादृच्छिक प्रश्न']);
+  }
   for (const [n, t] of items){
     if (n==='h'){ const h=document.createElement('div'); h.className='grp-h'; h.textContent=t; box.appendChild(h); continue; }
     const b = document.createElement('button');
@@ -563,7 +606,7 @@ function renderSets(){
     const bs = best[n];
     b.innerHTML = `<span class="no">${n===0?'∗':cgCard?((CG_META[Number(n.slice(3))]||{}).badge):n}</span><span class="t">${nameOf(n)}</span>
       <span class="m">${t}${bs!=null?`<br><span class="best">सर्वश्रेष्ठ: ${bs}%</span>`:''}</span>`;
-    b.onclick = () => { cfg.set=n; saveCfg(); renderSets(); seg('seg-count', COUNT_OPTS, 'count'); renderSummary(); };
+    b.onclick = () => { cfg.set=n; saveCfg(); const ts=store.get('cspdcl-tabsel')||{}; ts[TAB]=n; store.set('cspdcl-tabsel', ts); renderSets(); seg('seg-count', COUNT_OPTS, 'count'); renderSummary(); };
     box.appendChild(b);
   }
 }
